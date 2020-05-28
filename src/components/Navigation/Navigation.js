@@ -31,6 +31,7 @@ const MainHeader = styled.h2`
 `;
 
 const CurrentTable = styled.span`
+	text-align: center;
 	display: inline-block;
 	color: white;
 	padding: 0.5rem 0.5rem;
@@ -89,4 +90,4 @@ const Navigation = (props) => {
 	);
 };
 
-export default Navigation;
+export default React.memo(Navigation);
