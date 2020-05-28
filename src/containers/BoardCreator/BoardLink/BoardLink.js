@@ -8,8 +8,16 @@ const BoardContainer = styled.div`
 	box-shadow: 0 14px 28px rgba(0, 0, 0, 0.25), 0 10px 10px rgba(0, 0, 0, 0.22);
 	transition: transform 0.3s ease-in-out;
 	border-radius: 3px;
+	overflow: hidden;
 	font-family: inherit;
 	margin: 0.8rem;
+	color: ${(props) => (props.background ? 'white' : 'black')};
+	background: ${(props) =>
+		props.background
+			? `linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.6)),url("${props.background}") no-repeat`
+			: null};
+	background-size: cover;
+	background-position: center center;
 	@media (min-width: 320px) and (max-width: 480px) {
 		width: 16rem;
 		height: 9rem;
@@ -23,16 +31,16 @@ const BoardTitle = styled.p`
 	font-size: 2.4rem;
 	padding: 1rem 0.7rem 3rem;
 	margin: 0;
-	color: black;
+	color: inherit;
 
 	@media (min-width: 320px) and (max-width: 480px) {
 		font-size: 2.1rem;
 	}
 `;
 
-const Board = ({ title }) => {
+const Board = ({ title, background }) => {
 	return (
-		<BoardContainer>
+		<BoardContainer background={background}>
 			<BoardTitle>{title}</BoardTitle>
 		</BoardContainer>
 	);

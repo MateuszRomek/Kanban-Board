@@ -1,6 +1,5 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import styled from 'styled-components';
-//import { initialState } from './initialState';
 import GlobalStyle from '../../assets/styles/GlobalStyle';
 import Navigation from '../../components/Navigation/Navigation';
 import SideMenu from '../../components/SideMenu/SideMenu';
@@ -29,7 +28,7 @@ const ContentContainer = styled.div`
 `;
 
 function TableLayout(props) {
-	const { selectedImage, onModalClose } = props;
+	const { onModalClose } = props;
 	const [isMenuOpen, setModal] = useState(false);
 	const [currentBoard, setCurrentBoard] = useState(null);
 
@@ -40,14 +39,12 @@ function TableLayout(props) {
 		setCurrentBoard(props.boards[boardId]);
 	}, [props.boards, props.location.search]);
 
-	const openModal = () => setModal(true);
+	const openModal = useCallback(() => setModal(true), []);
 	const closeModal = () => {
 		setModal(false);
 		onModalClose();
 	};
-
 	useCount();
-
 	return (
 		<div className="App">
 			<GlobalStyle />
@@ -56,7 +53,9 @@ function TableLayout(props) {
 				openModal={openModal}
 				isMenuOpen={isMenuOpen}
 			/>
-			<MainContainer background={selectedImage}>
+			<MainContainer
+				background={currentBoard ? currentBoard.backgrounds.regular : null}
+			>
 				<ContentContainer>
 					<SideMenu isMenuOpen={isMenuOpen} closeModal={closeModal} />
 					{currentBoard && typeof currentBoard === 'object' && (
@@ -71,7 +70,6 @@ function TableLayout(props) {
 const mapStateToProps = (state) => {
 	return {
 		boards: state.BoardsReducer,
-		selectedImage: state.SideMenuReducer.selectedImage,
 	};
 };
 const mapDispatchToProps = (dispatch) => {

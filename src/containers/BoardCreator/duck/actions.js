@@ -6,4 +6,13 @@ const createNewBoard = (userBoardName) => {
 	};
 };
 
-export default { createNewBoard };
+const selectBackgroundImage = (regularUrl, smallUrl, boardId) => {
+	return {
+		type: types.SET_BACKGROUND_IMAGE,
+		regularUrl,
+		smallUrl,
+		boardId,
+	};
+};
+
+export default { createNewBoard, selectBackgroundImage };

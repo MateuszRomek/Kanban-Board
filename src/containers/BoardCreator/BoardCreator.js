@@ -49,13 +49,13 @@ const BoardsHome = ({ state }) => {
 		<Link
 			key={board.id}
 			to={{
-				pathname: '/boards',
+				pathname: '/board',
 				search: `?name=${board.id}`,
 				hash: `#${board.name}`,
 			}}
 			style={{ textDecoration: 'none' }}
 		>
-			<BoardLink title={board.name} />
+			<BoardLink background={board.background} title={board.name} />
 		</Link>
 	));
 

@@ -1,5 +1,6 @@
 const ADD_NEW_BOARD = 'ADD_NEW_BOARD';
-
+export const SET_BACKGROUND_IMAGE = 'SET_BACKGROUND_IMAGE';
 export default {
 	ADD_NEW_BOARD,
+	SET_BACKGROUND_IMAGE,
 };

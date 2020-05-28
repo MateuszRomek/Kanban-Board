@@ -1,5 +1,6 @@
 import { v4 as uuidv4 } from 'uuid';
 import types from './types';
+import cardTypes from '../../../components/BoardsContainer/AddNewCard/duck/types';
 const initialState = {
 	boards: [],
 };
@@ -15,6 +16,7 @@ const reducer = (state = initialState, action) => {
 			const newBoard = {
 				name: action.userBoardName,
 				id: uuidv4(),
+				background: '',
 			};
 
 			const newBoards = [...state.boards, newBoard];
@@ -24,28 +26,84 @@ const reducer = (state = initialState, action) => {
 			};
 
 			//Add to new state our new board object
+			const columnId = uuidv4();
 			newState[newBoard.id] = {
-				tasks: {
-					'task-1': {
-						id: 'task-1',
+				cards: {
+					'card-1': {
+						id: 'card-1',
 						title: 'Go out',
 						content: 'Take out the garbage',
 					},
 				},
 				columns: {
-					'column-1': {
-						id: uuidv4(),
-						title: '',
-						tasksIds: ['task-1'],
+					[columnId]: {
+						id: columnId,
+						title: 'Your column name',
+						cardsIds: ['card-1'],
 					},
 				},
-				columnOrder: ['column-1'],
+				columnOrder: [columnId],
+				backgrounds: {
+					small: '',
+					regular: '',
+				},
 			};
 
 			return {
 				...newState,
 			};
 
+		case cardTypes.ADD_NEW_CARD:
+			if (action.cardTitle === '') return;
+			const currentBoard = { ...state[action.boardId] };
+			const newCardId = uuidv4();
+			const newCards = {
+				...currentBoard.cards,
+				[newCardId]: {
+					id: newCardId,
+					title: action.cardTitle,
+					content: '',
+				},
+			};
+			currentBoard.cards = newCards;
+
+			const newColumnCardsArray = {
+				[action.columnId]: {
+					...currentBoard.columns[action.columnId],
+					cardsIds: [
+						...currentBoard.columns[action.columnId].cardsIds,
+						newCardId,
+					],
+				},
+			};
+			currentBoard.columns = {
+				...currentBoard.columns,
+				...newColumnCardsArray,
+			};
+
+			return {
+				...state,
+				[action.boardId]: { ...currentBoard },
+			};
+
+		case types.SET_BACKGROUND_IMAGE:
+			return {
+				...state,
+				boards: [
+					...state.boards.map((board) =>
+						board.id === action.boardId
+							? { ...board, background: action.smallUrl }
+							: { ...board }
+					),
+				],
+				[action.boardId]: {
+					...state[action.boardId],
+					backgrounds: {
+						small: action.smallUrl,
+						regular: action.regularUrl,
+					},
+				},
+			};
 		default:
 			return {
 				...state,
