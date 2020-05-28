@@ -1,10 +1,11 @@
 import React, { useState } from 'react';
 import { Droppable, Draggable } from 'react-beautiful-dnd';
-import styled from 'styled-components';
-import InnerList from '../InnerList/InnerList';
-import AddNewTask from '../AddNewTask/AddNewTask';
 import { CSSTransition } from 'react-transition-group';
-import Form from '../AddNewTask/AddNewTaskForm/AddNewTaskForm';
+import styled from 'styled-components';
+
+import InnerList from '../InnerList/InnerList';
+import AddNewCard from '../AddNewCard/AddNewCard';
+import Form from '../AddNewCard/AddNewCardForm/AddNewCardForm';
 const Container = styled.div`
 	padding: 2px 5px;
 	margin: 10px 15px;
@@ -37,6 +38,7 @@ const RelativeDiv = styled.div`
 	height: 3.7rem;
 	width: 100%;
 	border-radius: 4px;
+	box-shadow: 0 1px 5px rgba(0, 0, 0, 0.16), 0 1px 1px rgba(0, 0, 0, 0.23);
 `;
 
 const AddNewContainer = styled.div`
@@ -48,10 +50,16 @@ const Column = (props) => {
 	const [isClicked, setClicked] = useState(false);
 	const btnRef = React.useRef(null);
 	const formRef = React.useRef(null);
+
 	return (
 		<Draggable draggableId={props.column.id} index={props.index}>
 			{(provided) => (
-				<Container {...provided.draggableProps} ref={provided.innerRef}>
+				<Container
+					data-colid={props.column.id}
+					data-column={'column'}
+					{...provided.draggableProps}
+					ref={provided.innerRef}
+				>
 					<ColumnTitle {...provided.dragHandleProps}>
 						{props.column.title}
 					</ColumnTitle>
@@ -62,7 +70,7 @@ const Column = (props) => {
 								isDraggingOver={snapshot.isDraggingOver}
 								{...provided.droppableProps}
 							>
-								<InnerList tasks={props.tasks} />
+								<InnerList tasks={props.cards} />
 								{provided.placeholder}
 								<RelativeDiv>
 									<CSSTransition
@@ -73,7 +81,7 @@ const Column = (props) => {
 										timeout={500}
 									>
 										<AddNewContainer ref={btnRef} className="addCard">
-											<AddNewTask onClick={() => setClicked(true)} />
+											<AddNewCard onClick={() => setClicked(true)} />
 										</AddNewContainer>
 									</CSSTransition>
 									<CSSTransition
@@ -84,7 +92,7 @@ const Column = (props) => {
 										timeout={500}
 									>
 										<AddNewContainer ref={formRef} className="addCardSecondary">
-											<Form onClick={() => setClicked(false)} />
+											<Form closeForm={() => setClicked(false)} />
 										</AddNewContainer>
 									</CSSTransition>
 								</RelativeDiv>

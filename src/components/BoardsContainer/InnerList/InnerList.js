@@ -1,9 +1,9 @@
 import React from 'react';
-import Task from '../Task/Task';
+import Card from '../Card/Card';
 
 const InnerList = ({ tasks }) => {
-	return tasks.map((task, index) => (
-		<Task index={index} key={task.id} taskId={task.id} title={task.title} />
+	return tasks.map((card, index) => (
+		<Card index={index} key={card.id} taskId={card.id} title={card.title} />
 	));
 };
 

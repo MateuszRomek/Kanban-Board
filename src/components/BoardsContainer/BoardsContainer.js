@@ -2,11 +2,12 @@ import React from 'react';
 import { DragDropContext, Droppable } from 'react-beautiful-dnd';
 import styled from 'styled-components';
 import Column from './Column/Column';
-
+import useCount from '../../customHooks/useRenderCount';
 const Container = styled.div`
 	display: flex;
 `;
 const BoardsContainer = ({ currentBoard }) => {
+	useCount();
 	return (
 		<DragDropContext>
 			<Droppable droppableId="all-columns" direction="horizontal" type="column">
@@ -15,15 +16,16 @@ const BoardsContainer = ({ currentBoard }) => {
 						{currentBoard.columnOrder.map((columnId, index) => {
 							const column = currentBoard.columns[columnId];
 
-							const tasks = column.tasksIds.map(
-								(taskId) => currentBoard.tasks[taskId]
+							const cards = column.cardsIds.map(
+								(cardId) => currentBoard.cards[cardId]
 							);
+
 							return (
 								<Column
 									index={index}
 									column={column}
 									key={columnId}
-									tasks={tasks}
+									cards={cards}
 								/>
 							);
 						})}
@@ -34,4 +36,4 @@ const BoardsContainer = ({ currentBoard }) => {
 	);
 };
 
-export default BoardsContainer;
+export default React.memo(BoardsContainer);

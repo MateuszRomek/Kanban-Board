@@ -4,6 +4,12 @@ import { ReactComponent as PlusIcon } from '../../../../assets/icons/plus.svg';
 import React from 'react';
 import styled from 'styled-components';
 
+import { connect } from 'react-redux';
+import { compose } from 'redux';
+import actions from '../duck/actions';
+
+import { withRouter } from 'react-router-dom';
+
 const Form = styled.form`
 	width: 100%;
 	display: flex;
@@ -59,10 +65,21 @@ const ArrowHolder = styled.span`
 	}
 `;
 
-const AddNewTaskForm = (props) => {
+const AddNewCardForm = (props) => {
+	const handleAddNewTask = (e) => {
+		e.preventDefault();
+		const parentColumn = e.target.closest('div[data-column="column"]');
+		const columnId = parentColumn.dataset.colid;
+
+		const cardTitle = e.target.elements[0].value;
+		const boardId = props.location.search.split('=')[1];
+		props.addNewCard(cardTitle, boardId, columnId);
+		e.target.elements[0].value = '';
+		props.closeForm();
+	};
 	return (
-		<Form>
-			<ArrowHolder onClick={props.onClick}>
+		<Form onSubmit={handleAddNewTask}>
+			<ArrowHolder onClick={props.closeForm}>
 				<ArrowLeftIcon />
 			</ArrowHolder>
 			<FormInput placeholder="Type here.." />
@@ -73,4 +90,14 @@ const AddNewTaskForm = (props) => {
 	);
 };
 
-export default AddNewTaskForm;
+const mapDispatchToProps = (dispatch) => {
+	return {
+		addNewCard: (cardTitle, boardId, columnId) =>
+			dispatch(actions.addNewCard(cardTitle, boardId, columnId)),
+	};
+};
+
+export default compose(
+	withRouter,
+	connect(null, mapDispatchToProps)
+)(AddNewCardForm);
