@@ -1,10 +1,14 @@
 import React from 'react';
 import styled from 'styled-components';
 
+import { connect } from 'react-redux';
+import { compose } from 'redux';
+import { withRouter } from 'react-router-dom';
 import BackgroundPreview from './BackgroundPreview/BackgroundPreview';
 import Spinner from '../../UI/Spinner/Spinner';
-import { connect } from 'react-redux';
+
 import * as actions from '../duck/actions';
+import boardActions from '../../../containers/BoardCreator/duck/actions';
 
 const Container = styled.div`
 	background-color: white;
@@ -71,25 +75,27 @@ const GridContainer = styled.div`
 	grid-auto-rows: 95px;
 `;
 
-const BackgroundSearch = ({
-	searchValue,
-	onSearchBarChange,
-	fetchBackground,
-	imagesList,
-	searchBarLoading,
-	error,
-	selectBackgroundImage,
-}) => {
+const BackgroundSearch = (props) => {
+	const {
+		searchValue,
+		onSearchBarChange,
+		fetchBackground,
+		imagesList,
+		searchBarLoading,
+		error,
+		selectBackgroundImage,
+	} = props;
+	const boardId = props.location.search.split('=')[1];
+
 	const imgList = imagesList.map((image) => {
 		const regularUrl = image['preview_photos'][0].urls.regular;
-		const url = image['preview_photos'][0].urls.small;
-
+		const smallUrl = image['preview_photos'][0].urls.small;
 		return (
 			<BackgroundPreview
-				click={() => selectBackgroundImage(regularUrl)}
+				click={() => selectBackgroundImage(regularUrl, smallUrl, boardId)}
 				key={image.id}
 				alt={image.title}
-				imgUrl={url}
+				imgUrl={smallUrl}
 			/>
 		);
 	});
@@ -113,6 +119,7 @@ const BackgroundSearch = ({
 				</SearchForm>
 			</MenuSection>
 			<GridContainer>
+				{error && <p>{error}</p>}
 				{searchBarLoading ? <Spinner isOnGrid={true} /> : imgList}
 			</GridContainer>
 		</Container>
@@ -133,9 +140,15 @@ const mapDispatchToProps = (dispatch) => {
 		onSearchBarChange: (e) => dispatch(actions.searchbarChange(e)),
 		fetchBackground: (e, searchValue) =>
 			dispatch(actions.fetchUnsplash(e, searchValue)),
-		selectBackgroundImage: (imageUrl) =>
-			dispatch(actions.selectBackgroundImage(imageUrl)),
+		selectBackgroundImage: (regularUrl, smallUrl, boardId) =>
+			dispatch(
+				boardActions.selectBackgroundImage(regularUrl, smallUrl, boardId)
+			),
 	};
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(BackgroundSearch);
+//export default connect(mapStateToProps, mapDispatchToProps)(BackgroundSearch);
+export default compose(
+	connect(mapStateToProps, mapDispatchToProps),
+	withRouter
+)(BackgroundSearch);

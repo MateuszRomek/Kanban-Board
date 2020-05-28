@@ -13,13 +13,6 @@ export const resetImageList = () => {
 	};
 };
 
-export const selectBackgroundImage = (imageUrl) => {
-	return {
-		type: types.SET_BACKGROUND_IMAGE,
-		imageUrl,
-	};
-};
-
 const startFetchBackgroundImg = () => ({
 	type: types.REQUEST_PHOTOS_START,
 	isFetching: true,

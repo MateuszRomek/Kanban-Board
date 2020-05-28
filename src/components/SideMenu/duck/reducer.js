@@ -4,7 +4,6 @@ const initialState = {
 	searchBarLoading: false,
 	imagesList: [],
 	error: null,
-	selectedImage: '',
 };
 
 const reducer = (state = initialState, action) => {
@@ -22,11 +21,7 @@ const reducer = (state = initialState, action) => {
 				...state,
 				imagesList: [],
 			};
-		case types.SET_BACKGROUND_IMAGE:
-			return {
-				...state,
-				selectedImage: action.imageUrl,
-			};
+
 		case types.REQUEST_PHOTOS_START:
 			return {
 				...state,
