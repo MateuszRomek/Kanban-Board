@@ -15,4 +15,26 @@ const selectBackgroundImage = (regularUrl, smallUrl, boardId) => {
 	};
 };
 
-export default { createNewBoard, selectBackgroundImage };
+const changeColumnTitle = (newColumnTitle, boardId, columnId) => {
+	return {
+		type: types.CHANGE_COLUMN_TITLE,
+		newColumnTitle,
+		boardId,
+		columnId,
+	};
+};
+
+const onDragEnd = (result, boardId) => {
+	return {
+		type: types.ON_DRAG_END,
+		result,
+		boardId,
+	};
+};
+
+export default {
+	createNewBoard,
+	selectBackgroundImage,
+	changeColumnTitle,
+	onDragEnd,
+};

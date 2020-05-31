@@ -5,7 +5,6 @@ import Navigation from '../../components/Navigation/Navigation';
 import SideMenu from '../../components/SideMenu/SideMenu';
 import BoardsContainer from '../../components/BoardsContainer/BoardsContainer';
 
-import useCount from '../../customHooks/useRenderCount';
 import { connect } from 'react-redux';
 import * as actions from '../../components/SideMenu/duck/actions';
 
@@ -44,7 +43,7 @@ function TableLayout(props) {
 		setModal(false);
 		onModalClose();
 	};
-	useCount();
+
 	return (
 		<div className="App">
 			<GlobalStyle />

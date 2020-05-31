@@ -44,7 +44,6 @@ const reducer = (state = initialState, action) => {
 				},
 				columnOrder: [columnId],
 				backgrounds: {
-					small: '',
 					regular: '',
 				},
 			};
@@ -103,6 +102,43 @@ const reducer = (state = initialState, action) => {
 						regular: action.regularUrl,
 					},
 				},
+			};
+		case types.CHANGE_COLUMN_TITLE:
+			const columnClone = {
+				...state[action.boardId].columns[action.columnId],
+			};
+			columnClone.title = action.newColumnTitle;
+
+			return {
+				...state,
+				[action.boardId]: {
+					...state[action.boardId],
+					columns: {
+						...state[action.boardId].columns,
+						[action.columnId]: {
+							...columnClone,
+						},
+					},
+				},
+			};
+
+		case types.ON_DRAG_END:
+			const { destination, source, draggableId, type } = action.result;
+			console.log(destination, source, draggableId, type, action.boardId);
+
+			if (!destination) return { ...state };
+			if (
+				destination.droppableId === source.droppableId &&
+				destination.index === source.index
+			)
+				return { ...state };
+			/* 
+				TODO
+				reordering on type =  columns, 
+				reordering on second case which will be cards
+			*/
+			return {
+				...state,
 			};
 		default:
 			return {
