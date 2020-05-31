@@ -77,8 +77,6 @@ const GridContainer = styled.div`
 
 const BackgroundSearch = (props) => {
 	const {
-		searchValue,
-		onSearchBarChange,
 		fetchBackground,
 		imagesList,
 		searchBarLoading,
@@ -100,16 +98,19 @@ const BackgroundSearch = (props) => {
 		);
 	});
 
+	const handleFormSubmit = (e) => {
+		e.preventDefault();
+		const searchValue = e.currentTarget.elements[0].value;
+		fetchBackground(searchValue);
+	};
 	return (
 		<Container>
 			<MenuSection>
-				<SearchForm onSubmit={(e) => fetchBackground(e, searchValue)}>
+				<SearchForm onSubmit={handleFormSubmit}>
 					<SearchLabel htmlFor="searchbar">
 						Choose your board background
 					</SearchLabel>
 					<SearchBar
-						value={searchValue}
-						onChange={onSearchBarChange}
 						id="searchbar"
 						type="text"
 						placeholder="Mountains.."
@@ -128,7 +129,6 @@ const BackgroundSearch = (props) => {
 
 const mapStateToProps = (state) => {
 	return {
-		searchValue: state.SideMenuReducer.searchBarValue,
 		error: state.SideMenuReducer.error,
 		imagesList: state.SideMenuReducer.imagesList,
 		searchBarLoading: state.SideMenuReducer.searchBarLoading,
@@ -137,7 +137,6 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
 	return {
-		onSearchBarChange: (e) => dispatch(actions.searchbarChange(e)),
 		fetchBackground: (e, searchValue) =>
 			dispatch(actions.fetchUnsplash(e, searchValue)),
 		selectBackgroundImage: (regularUrl, smallUrl, boardId) =>

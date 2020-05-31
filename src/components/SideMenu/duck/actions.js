@@ -1,12 +1,5 @@
 import * as types from './types';
 
-export const searchbarChange = (e) => {
-	return {
-		type: types.SEARCHBAR_CHANGE,
-		inputValue: e.target.value,
-	};
-};
-
 export const resetImageList = () => {
 	return {
 		type: types.MODAL_RESET_IMAGE_LIST,
@@ -29,9 +22,8 @@ const finishFetchBackgroundImg = (data) => ({
 	payload: data,
 });
 
-export const fetchUnsplash = (e, searchValue) => {
+export const fetchUnsplash = (searchValue) => {
 	return (dispatch) => {
-		e.preventDefault();
 		dispatch(startFetchBackgroundImg());
 		return fetch(
 			`https://api.unsplash.com/search/collections/?client_id=lF2X9QbJxugtbhXVYRpvK2rMBWrX_4yAgmUQFhWCeGw&query="${searchValue}"`

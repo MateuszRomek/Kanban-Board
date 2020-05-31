@@ -1,6 +1,5 @@
 import * as types from './types';
 const initialState = {
-	searchBarValue: '',
 	searchBarLoading: false,
 	imagesList: [],
 	error: null,
@@ -8,11 +7,6 @@ const initialState = {
 
 const reducer = (state = initialState, action) => {
 	switch (action.type) {
-		case types.SEARCHBAR_CHANGE:
-			return {
-				...state,
-				searchBarValue: action.inputValue,
-			};
 		case types.MODAL_RESET_IMAGE_LIST:
 			if (state.imagesList.length === 0) {
 				return { ...state };
