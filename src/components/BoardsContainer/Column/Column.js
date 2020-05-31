@@ -2,6 +2,10 @@ import React, { useState } from 'react';
 import { Droppable, Draggable } from 'react-beautiful-dnd';
 import { CSSTransition } from 'react-transition-group';
 import styled from 'styled-components';
+import { compose } from 'redux';
+import { connect } from 'react-redux';
+import { withRouter } from 'react-router-dom';
+import actions from '../../../containers/BoardCreator/duck/actions';
 
 import InnerList from '../InnerList/InnerList';
 import AddNewCard from '../AddNewCard/AddNewCard';
@@ -21,8 +25,8 @@ const Container = styled.div`
 	background-color: #ebecf0;
 `;
 
-const ColumnTitle = styled.h2`
-	padding: 8px;
+const ColumnTitleHolder = styled.div`
+	padding: 0.88rem;
 `;
 
 const TaskList = styled.div`
@@ -46,11 +50,30 @@ const AddNewContainer = styled.div`
 	width: 100%;
 `;
 
+const TextArea = styled.textarea`
+	width: 90%;
+	padding: 0.5rem;
+	border: none;
+	background-color: transparent;
+	resize: none;
+	font-size: 2rem;
+	height: 3rem;
+	word-break: break-all;
+	overflow: hidden;
+`;
+
 const Column = (props) => {
 	const [isClicked, setClicked] = useState(false);
 	const btnRef = React.useRef(null);
 	const formRef = React.useRef(null);
+	const currentBoardId = props.location.search.split('=')[1];
+	const currentBoardColumns = props.boardState[currentBoardId].columns;
+	const currentColumnTitle = currentBoardColumns[props.column.id].title;
 
+	const handleColumnTitleChange = (e) => {
+		const newTitle = e.target.value;
+		props.textareaChange(newTitle, currentBoardId, props.column.id);
+	};
 	return (
 		<Draggable draggableId={props.column.id} index={props.index}>
 			{(provided) => (
@@ -60,9 +83,12 @@ const Column = (props) => {
 					{...provided.draggableProps}
 					ref={provided.innerRef}
 				>
-					<ColumnTitle {...provided.dragHandleProps}>
-						{props.column.title}
-					</ColumnTitle>
+					<ColumnTitleHolder {...provided.dragHandleProps}>
+						<TextArea
+							value={currentColumnTitle}
+							onChange={handleColumnTitleChange}
+						/>
+					</ColumnTitleHolder>
 					<Droppable type="task" droppableId={props.column.id}>
 						{(provided, snapshot) => (
 							<TaskList
@@ -106,4 +132,20 @@ const Column = (props) => {
 	);
 };
 
-export default Column;
+const mapStateToProps = (state) => {
+	return {
+		boardState: state.BoardsReducer,
+	};
+};
+
+const mapDispatchToProps = (dispatch) => {
+	return {
+		textareaChange: (newColumnTitle, boardId, columnId) =>
+			dispatch(actions.changeColumnTitle(newColumnTitle, boardId, columnId)),
+	};
+};
+
+export default compose(
+	connect(mapStateToProps, mapDispatchToProps),
+	withRouter
+)(Column);
