@@ -11,7 +11,7 @@ import InnerList from '../InnerList/InnerList';
 import AddNewCard from '../AddNewCard/AddNewCard';
 import Form from '../AddNewCard/AddNewCardForm/AddNewCardForm';
 const Container = styled.div`
-	padding: 2px 5px;
+	padding: 3px 6px;
 	margin: 10px 15px;
 	border: 1px solid white;
 	border-radius: 4px;
@@ -26,7 +26,7 @@ const Container = styled.div`
 `;
 
 const ColumnTitleHolder = styled.div`
-	padding: 0.88rem;
+	padding: 1rem;
 `;
 
 const TaskList = styled.div`
@@ -51,7 +51,7 @@ const AddNewContainer = styled.div`
 `;
 
 const TextArea = styled.textarea`
-	width: 90%;
+	width: 95%;
 	padding: 0.5rem;
 	border: none;
 	background-color: transparent;

@@ -6,25 +6,20 @@ import { connect } from 'react-redux';
 import { compose } from 'redux';
 import { withRouter } from 'react-router-dom';
 import actions from '../../containers/BoardCreator/duck/actions';
-
+import { findBoardId } from '../../utils/findBoardId';
 import Column from './Column/Column';
+import AddNewColumn from './AddNewColumn/AddNewColumn';
 
 const Container = styled.div`
 	display: flex;
+	@media (min-width: 320px) and (max-width: 480px) {
+		overflow-x: scroll;
+	}
 `;
 
-const AddColumnHolder = styled.div`
-	padding: 2px 5px;
-	margin: 10px 15px;
-	border: 1px solid white;
-	border-radius: 4px;
-	min-width: 30rem;
-
-	background-color: #ebecf0;
-`;
 const BoardsContainer = ({ currentBoard, onDragEnd, location }) => {
 	const handleDragEnd = (result) => {
-		const boardId = location.search.split('=')[1];
+		const boardId = findBoardId(location);
 		onDragEnd(result, boardId);
 	};
 	return (
@@ -49,7 +44,7 @@ const BoardsContainer = ({ currentBoard, onDragEnd, location }) => {
 							);
 						})}
 						{provided.placeholder}
-						<AddColumnHolder>Test</AddColumnHolder>
+						<AddNewColumn />
 					</Container>
 				)}
 			</Droppable>
