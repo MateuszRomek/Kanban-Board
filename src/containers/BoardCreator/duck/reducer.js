@@ -38,7 +38,7 @@ const reducer = (state = initialState, action) => {
 				columns: {
 					[columnId]: {
 						id: columnId,
-						title: 'Your column name',
+						title: 'Your column title',
 						cardsIds: ['card-1'],
 					},
 				},
@@ -119,6 +119,32 @@ const reducer = (state = initialState, action) => {
 							...columnClone,
 						},
 					},
+				},
+			};
+		case types.ADD_NEW_COLUMN:
+			if (action.columnTitle === '') return;
+			const newColumnId = uuidv4();
+			const columnObject = {
+				id: newColumnId,
+				title: action.columnTitle,
+				cardsIds: [],
+			};
+
+			const newColumntOrder = [
+				...state[action.boardId].columnOrder,
+				newColumnId,
+			];
+			return {
+				...state,
+				[action.boardId]: {
+					...state[action.boardId],
+					columns: {
+						...state[action.boardId].columns,
+						[newColumnId]: {
+							...columnObject,
+						},
+					},
+					columnOrder: [...newColumntOrder],
 				},
 			};
 

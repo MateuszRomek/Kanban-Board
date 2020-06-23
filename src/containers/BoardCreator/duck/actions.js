@@ -32,9 +32,18 @@ const onDragEnd = (result, boardId) => {
 	};
 };
 
+const addNewColumn = (boardId, columnTitle) => {
+	return {
+		type: types.ADD_NEW_COLUMN,
+		boardId,
+		columnTitle,
+	};
+};
+
 export default {
 	createNewBoard,
 	selectBackgroundImage,
 	changeColumnTitle,
 	onDragEnd,
+	addNewColumn,
 };
