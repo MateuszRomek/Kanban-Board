@@ -5,8 +5,8 @@ import { connect } from 'react-redux';
 import actions from '../duck/actions';
 
 const AddNewBoard = styled.div`
-	width: 18rem;
-	height: 11rem;
+	width: 24rem;
+	height: 14rem;
 	background-color: rgba(255, 255, 255, 0.7);
 	display: flex;
 	align-items: center;
@@ -17,8 +17,13 @@ const AddNewBoard = styled.div`
 	transform: scale(0.9);
 	margin: 0.5rem;
 	@media (min-width: 320px) and (max-width: 480px) {
-		width: 16rem;
-		height: 9rem;
+		width: 100%;
+		height: 11rem;
+		transform: none;
+		margin: 1rem 0;
+		&:hover {
+			transform: none;
+		}
 	}
 	&:hover {
 		transform: scale(1);
@@ -30,7 +35,7 @@ const CreateButton = styled.button`
 	border: none;
 	display: flex;
 	align-items: center;
-	font-size: 1.5rem;
+	font-size: 1.7rem;
 	font-weight: bold;
 
 	& svg {
@@ -53,6 +58,10 @@ const CreateForm = styled.form`
 	display: flex;
 	flex-direction: column;
 	align-items: center;
+	@media (min-width: 320px) and (max-width: 480px) {
+		flex-direction: row;
+		padding: 0 1rem;
+	}
 `;
 const CreateInput = styled.input`
 	padding: 0.5rem 0.3rem;
@@ -61,7 +70,7 @@ const CreateInput = styled.input`
 	background-color: transparent;
 	border: none;
 	border-bottom: 1px solid gray;
-	margin-bottom: 0.8rem;
+	margin-bottom: 1.6rem;
 	font-size: 1.7rem;
 	&:active {
 		outline: none;
@@ -73,6 +82,7 @@ const CreateInput = styled.input`
 	@media (min-width: 320px) and (max-width: 480px) {
 		border: 1px solid gray;
 		padding: 0.5rem 0.6rem;
+		margin-bottom: 0;
 	}
 `;
 

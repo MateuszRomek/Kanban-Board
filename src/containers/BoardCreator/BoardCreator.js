@@ -18,6 +18,7 @@ const AppHeader = styled.h1`
 	margin: 0;
 	text-align: center;
 	color: rgb(232, 232, 232);
+	text-shadow: 2px 2px 5px rgb(51, 51, 51);
 	font-style: italic;
 	padding: 1rem 0;
 `;
@@ -28,6 +29,7 @@ const BoardsInfo = styled.div`
 `;
 const BoardsHeader = styled.h2`
 	color: rgb(232, 232, 232);
+	text-shadow: 2px 2px 5px rgb(51, 51, 51);
 `;
 
 const BoardsContainer = styled.div`
@@ -39,7 +41,7 @@ const BoardsContainer = styled.div`
 		display: grid;
 		align-items: center;
 		justify-content: center;
-		grid-template-columns: repeat(2, 1fr);
+		grid-template-columns: 1fr;
 		grid-template-rows: auto;
 	}
 `;

@@ -1,8 +1,8 @@
 import React from 'react';
 import styled from 'styled-components';
 const BoardContainer = styled.div`
-	width: 18rem;
-	height: 11rem;
+	width: 24rem;
+	height: 14rem;
 	background-color: white;
 	transform: scale(0.9);
 	box-shadow: 0 14px 28px rgba(0, 0, 0, 0.25), 0 10px 10px rgba(0, 0, 0, 0.22);
@@ -19,8 +19,14 @@ const BoardContainer = styled.div`
 	background-size: cover;
 	background-position: center center;
 	@media (min-width: 320px) and (max-width: 480px) {
-		width: 16rem;
-		height: 9rem;
+		width: 100%;
+		height: 11rem;
+		transform: none; 
+		margin: 1rem 0;
+		&:hover {
+		transform: none; 
+		}
+		}
 	}
 	&:hover {
 		transform: scale(1);
@@ -29,7 +35,7 @@ const BoardContainer = styled.div`
 
 const BoardTitle = styled.p`
 	font-size: 2.4rem;
-	padding: 1rem 0.7rem 3rem;
+	padding: 1rem 0.9rem 3rem;
 	margin: 0;
 	color: inherit;
 
