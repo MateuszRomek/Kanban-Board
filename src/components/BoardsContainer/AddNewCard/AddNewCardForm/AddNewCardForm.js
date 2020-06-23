@@ -1,5 +1,4 @@
 import { ReactComponent as ArrowLeftIcon } from '../../../../assets/icons/arrowBackLeft.svg';
-import { ReactComponent as PlusIcon } from '../../../../assets/icons/plus.svg';
 
 import React from 'react';
 import styled from 'styled-components';
@@ -9,6 +8,8 @@ import { compose } from 'redux';
 import actions from '../duck/actions';
 
 import { withRouter } from 'react-router-dom';
+
+import AddButton from '../../../UI/Buttons/AddButton/AddButton';
 
 const Form = styled.form`
 	width: 100%;
@@ -38,18 +39,6 @@ const FormInput = styled.input`
 		position: absolute;
 		left: 0;
 		bottom: 0;
-	}
-`;
-const FormSubmitButton = styled.button`
-	border: none;
-	background-color: transparent;
-	height: 2.4rem;
-	width: 2.4rem;
-	padding: 0.6rem;
-	display: inline-block;
-	& svg {
-		width: 100%;
-		height: 100%;
 	}
 `;
 
@@ -83,9 +72,7 @@ const AddNewCardForm = (props) => {
 				<ArrowLeftIcon />
 			</ArrowHolder>
 			<FormInput placeholder="Type here.." />
-			<FormSubmitButton>
-				<PlusIcon />
-			</FormSubmitButton>
+			<AddButton isSubmitType={true} />
 		</Form>
 	);
 };
