@@ -6,7 +6,7 @@ import SideMenu from '../../components/SideMenu/SideMenu';
 import BoardsContainer from '../../components/BoardsContainer/BoardsContainer';
 
 import { connect } from 'react-redux';
-import * as actions from '../../components/SideMenu/duck/actions';
+import * as actions from '../../store/actions';
 
 const MainContainer = styled.div`
 	width: 100vw;

@@ -5,7 +5,7 @@ import styled from 'styled-components';
 import { compose } from 'redux';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
-import actions from '../../../containers/BoardCreator/duck/actions';
+import * as actions from '../../../store/actions';
 
 import InnerList from '../InnerList/InnerList';
 import AddNewCard from '../AddNewCard/AddNewCard';

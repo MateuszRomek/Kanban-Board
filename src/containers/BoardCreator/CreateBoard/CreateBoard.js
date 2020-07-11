@@ -2,7 +2,7 @@ import React from 'react';
 import styled from 'styled-components';
 import { ReactComponent as PlusIcon } from '../../../assets/icons/plus.svg';
 import { connect } from 'react-redux';
-import actions from '../duck/actions';
+import * as actions from '../../../store/actions';
 
 const AddNewBoard = styled.div`
 	width: 24rem;

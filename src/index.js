@@ -4,24 +4,9 @@ import './index.css';
 import App from './App';
 import * as serviceWorker from './serviceWorker';
 
-import SideMenuReducer from './components/SideMenu/duck/reducer';
-import BoardsReducer from './containers/BoardCreator/duck/reducer';
 import { BrowserRouter } from 'react-router-dom';
-
-import { createStore, applyMiddleware, combineReducers, compose } from 'redux';
 import { Provider } from 'react-redux';
-import thunk from 'redux-thunk';
-
-const rootReducer = combineReducers({
-	SideMenuReducer,
-	BoardsReducer,
-});
-
-const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
-const store = createStore(
-	rootReducer,
-	composeEnhancers(applyMiddleware(thunk))
-);
+import store from './store/index';
 
 ReactDOM.render(
 	<Provider store={store}>

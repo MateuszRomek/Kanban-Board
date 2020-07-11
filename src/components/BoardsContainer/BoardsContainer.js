@@ -5,7 +5,7 @@ import styled from 'styled-components';
 import { connect } from 'react-redux';
 import { compose } from 'redux';
 import { withRouter } from 'react-router-dom';
-import actions from '../../containers/BoardCreator/duck/actions';
+import * as actions from '../../store/actions';
 import { findBoardId } from '../../utils/findBoardId';
 import Column from './Column/Column';
 import AddNewColumn from './AddNewColumn/AddNewColumn';

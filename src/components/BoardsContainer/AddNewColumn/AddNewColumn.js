@@ -2,7 +2,7 @@ import React from 'react';
 import styled from 'styled-components';
 import AddButton from '../../UI/Buttons/AddButton/AddButton';
 
-import actions from '../../../containers/BoardCreator/duck/actions';
+import * as actions from '../../../store/actions';
 import { connect } from 'react-redux';
 import { compose } from 'redux';
 import { withRouter } from 'react-router-dom';

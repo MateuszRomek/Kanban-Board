@@ -5,7 +5,7 @@ import styled from 'styled-components';
 
 import { connect } from 'react-redux';
 import { compose } from 'redux';
-import actions from '../duck/actions';
+import * as actions from '../../../../store/actions';
 
 import { withRouter } from 'react-router-dom';
 

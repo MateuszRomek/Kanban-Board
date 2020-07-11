@@ -7,8 +7,7 @@ import { withRouter } from 'react-router-dom';
 import BackgroundPreview from './BackgroundPreview/BackgroundPreview';
 import Spinner from '../../UI/Spinner/Spinner';
 
-import * as actions from '../duck/actions';
-import boardActions from '../../../containers/BoardCreator/duck/actions';
+import * as actions from '../../../store/actions';
 
 const Container = styled.div`
 	background-color: white;
@@ -140,9 +139,7 @@ const mapDispatchToProps = (dispatch) => {
 		fetchBackground: (e, searchValue) =>
 			dispatch(actions.fetchUnsplash(e, searchValue)),
 		selectBackgroundImage: (regularUrl, smallUrl, boardId) =>
-			dispatch(
-				boardActions.selectBackgroundImage(regularUrl, smallUrl, boardId)
-			),
+			dispatch(actions.selectBackgroundImage(regularUrl, smallUrl, boardId)),
 	};
 };
 
