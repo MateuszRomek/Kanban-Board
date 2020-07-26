@@ -65,6 +65,7 @@ function TableLayout(props) {
 					)}
 				</ContentContainer>
 			</MainContainer>
+
 			{isBoardsArrayEmpty ? <Redirect to="/" /> : null}
 		</div>
 	);

@@ -170,13 +170,6 @@ const reducer = (state = initialState, action) => {
 						columnOrder: newColumnOrder,
 					},
 				};
-				// return {
-				// 	...state,
-				// 	[action.boardId]: {
-				// 		...state[action.boardId],
-				// 		columnOrder: newColumnOrder,
-				// 	},
-				// };
 			}
 			let columnsCopy = { ...state[action.boardId].columns };
 
@@ -195,7 +188,10 @@ const reducer = (state = initialState, action) => {
 				...state,
 				[action.boardId]: {
 					...state[action.boardId],
-					columns: columnsCopy,
+					columns: {
+						...state[action.boardId].columns,
+						...columnsCopy,
+					},
 				},
 			};
 

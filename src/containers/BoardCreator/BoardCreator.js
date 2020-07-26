@@ -5,7 +5,7 @@ import CreateBoard from './CreateBoard/CreateBoard';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
 import GlobalStyle from '../../assets/styles/GlobalStyle';
-
+import Modal from '../../components/UI/Modal/Modal';
 const Container = styled.div`
 	width: 100vw;
 	height: 100vh;
@@ -29,6 +29,7 @@ const BoardsInfo = styled.div`
 `;
 const BoardsHeader = styled.h2`
 	color: rgb(232, 232, 232);
+	margin-left: 2rem;
 	text-shadow: 2px 2px 5px rgb(51, 51, 51);
 `;
 
@@ -64,6 +65,7 @@ const BoardsHome = ({ state }) => {
 	return (
 		<Container>
 			<GlobalStyle />
+			<Modal />
 			<AppHeader>My Kanban Board</AppHeader>
 			<BoardsInfo>
 				<BoardsHeader>Select your board!</BoardsHeader>
