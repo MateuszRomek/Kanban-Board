@@ -9,7 +9,7 @@ import GlobalStyle from '../../assets/styles/GlobalStyle';
 const Container = styled.div`
 	width: 100vw;
 	height: 100vh;
-	background-color: #2980b9;
+	background: #6190e8;
 `;
 
 const AppHeader = styled.h1`

@@ -4,7 +4,7 @@ import GlobalStyle from '../../assets/styles/GlobalStyle';
 import Navigation from '../../components/Navigation/Navigation';
 import SideMenu from '../../components/SideMenu/SideMenu';
 import BoardsContainer from '../../components/BoardsContainer/BoardsContainer';
-
+import { Redirect } from 'react-router-dom';
 import { connect } from 'react-redux';
 import * as actions from '../../store/actions';
 
@@ -32,7 +32,7 @@ function TableLayout(props) {
 	const [currentBoard, setCurrentBoard] = useState(null);
 
 	const boardName = props.location.hash.slice(1);
-
+	const isBoardsArrayEmpty = props.boards.boards.length === 0;
 	useEffect(() => {
 		const boardId = props.location.search.split('=')[1];
 		setCurrentBoard(props.boards[boardId]);
@@ -58,10 +58,14 @@ function TableLayout(props) {
 				<ContentContainer>
 					<SideMenu isMenuOpen={isMenuOpen} closeModal={closeModal} />
 					{currentBoard && typeof currentBoard === 'object' && (
-						<BoardsContainer currentBoard={currentBoard} />
+						<BoardsContainer
+							isBoardsArrayEmpty={isBoardsArrayEmpty}
+							currentBoard={currentBoard}
+						/>
 					)}
 				</ContentContainer>
 			</MainContainer>
+			{isBoardsArrayEmpty ? <Redirect to="/" /> : null}
 		</div>
 	);
 }
