@@ -2,6 +2,7 @@ import React from 'react';
 import styled from 'styled-components';
 
 const AddButton = styled.span`
+	margin-top: auto;
 	width: 100%;
 	display: inline-block;
 	background-color: white;

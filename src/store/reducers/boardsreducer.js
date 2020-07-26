@@ -25,7 +25,6 @@ const reducer = (state = initialState, action) => {
 				boards: newBoards,
 			};
 
-			//Add to new state our new board object
 			const columnId = uuidv4();
 			newState[newBoard.id] = {
 				cards: {
@@ -122,8 +121,9 @@ const reducer = (state = initialState, action) => {
 				},
 			};
 		case types.ADD_NEW_COLUMN:
-			if (action.columnTitle === '') return;
+			if (action.columnTitle === '') return { ...state };
 			const newColumnId = uuidv4();
+
 			const columnObject = {
 				id: newColumnId,
 				title: action.columnTitle,
@@ -150,7 +150,6 @@ const reducer = (state = initialState, action) => {
 
 		case types.ON_DRAG_END:
 			const { destination, source, draggableId, type } = action.result;
-			console.log(destination, source, draggableId, type, action.boardId);
 
 			if (!destination) return { ...state };
 			if (
@@ -158,14 +157,48 @@ const reducer = (state = initialState, action) => {
 				destination.index === source.index
 			)
 				return { ...state };
-			/* 
-				TODO
-				reordering on type =  columns, 
-				reordering on second case which will be cards
-			*/
+
+			if (type === 'column') {
+				const newColumnOrder = [...state[action.boardId].columnOrder];
+				newColumnOrder.splice(source.index, 1);
+				newColumnOrder.splice(destination.index, 0, draggableId);
+
+				return {
+					...state,
+					[action.boardId]: {
+						...state[action.boardId],
+						columnOrder: newColumnOrder,
+					},
+				};
+				// return {
+				// 	...state,
+				// 	[action.boardId]: {
+				// 		...state[action.boardId],
+				// 		columnOrder: newColumnOrder,
+				// 	},
+				// };
+			}
+			let columnsCopy = { ...state[action.boardId].columns };
+
+			const startColumn = columnsCopy[source.droppableId];
+			const finishColumn = columnsCopy[destination.droppableId];
+
+			startColumn.cardsIds.splice(source.index, 1);
+			finishColumn.cardsIds.splice(destination.index, 0, draggableId);
+
+			columnsCopy = {
+				[startColumn.id]: { ...startColumn },
+				[finishColumn.id]: { ...finishColumn },
+			};
+
 			return {
 				...state,
+				[action.boardId]: {
+					...state[action.boardId],
+					columns: columnsCopy,
+				},
 			};
+
 		default:
 			return {
 				...state,

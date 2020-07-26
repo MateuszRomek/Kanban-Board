@@ -11,12 +11,12 @@ import InnerList from '../InnerList/InnerList';
 import AddNewCard from '../AddNewCard/AddNewCard';
 import Form from '../AddNewCard/AddNewCardForm/AddNewCardForm';
 const Container = styled.div`
+	align-self: flex-start;
 	padding: 3px 6px;
 	margin: 10px 15px;
 	border: 1px solid white;
 	border-radius: 4px;
 	min-width: 30rem;
-
 	max-height: 75rem;
 	overflow-y: auto;
 	overflow-x: hidden;
@@ -32,11 +32,12 @@ const ColumnTitleHolder = styled.div`
 const TaskList = styled.div`
 	padding: 8px;
 	flex-grow: 1;
-	min-height: 11rem;
+	min-height: 9rem;
 	background-color: ${(props) =>
 		props.isDraggingOver ? 'lightgrey' : 'inherit'};
 `;
 const RelativeDiv = styled.div`
+	align-self: flex-end;
 	position: relative;
 	overflow: hidden;
 	height: 3.7rem;

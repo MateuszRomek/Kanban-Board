@@ -22,27 +22,21 @@ const BoardsContainer = ({ currentBoard, onDragEnd, location }) => {
 		const boardId = findBoardId(location);
 		onDragEnd(result, boardId);
 	};
+
+	const columnArray = currentBoard.columnOrder.map((columnId, index) => {
+		const column = currentBoard.columns[columnId];
+		const cards = column.cardsIds.map((cardId) => currentBoard.cards[cardId]);
+		return (
+			<Column index={index} column={column} key={columnId} cards={cards} />
+		);
+	});
+	console.log(columnArray);
 	return (
 		<DragDropContext onDragEnd={handleDragEnd}>
 			<Droppable droppableId="all-columns" direction="horizontal" type="column">
 				{(provided) => (
 					<Container {...provided.droppableProps} ref={provided.innerRef}>
-						{currentBoard.columnOrder.map((columnId, index) => {
-							const column = currentBoard.columns[columnId];
-
-							const cards = column.cardsIds.map(
-								(cardId) => currentBoard.cards[cardId]
-							);
-
-							return (
-								<Column
-									index={index}
-									column={column}
-									key={columnId}
-									cards={cards}
-								/>
-							);
-						})}
+						{columnArray}
 						{provided.placeholder}
 						<AddNewColumn />
 					</Container>
