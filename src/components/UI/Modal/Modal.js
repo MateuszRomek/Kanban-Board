@@ -3,6 +3,9 @@ import styled from 'styled-components';
 import { ReactComponent as DescriptionIcon } from '../../../assets/icons/description.svg';
 import { ReactComponent as ToDoListIcon } from '../../../assets/icons/todolist.svg';
 import { useEffect } from 'react';
+import SideMenuModal from './SideMenuModal/SideMenuModal';
+import NestedMenu from './SideMenuModal/NestedMenu/NestedMenu';
+
 const Backdrop = styled.div`
 	position: fixed;
 	display: flex;
@@ -19,7 +22,6 @@ const Backdrop = styled.div`
 
 const ModalOuter = styled.div`
 	padding: 1rem 3rem;
-	position: relative;
 	background-color: #f4f5f7;
 	height: 60rem;
 	width: 65rem;
@@ -33,7 +35,7 @@ const ModalInner = styled.div`
 	height: 100%;
 	color: #4b6584;
 	display: grid;
-	grid-template-columns: 70% 30%;
+	grid-template-columns: 75% 25%;
 `;
 const CardDetailsContainer = styled.div``;
 const ModalTitle = styled.h2`
@@ -55,6 +57,7 @@ const Textarea = styled.textarea`
 	font-family: 'Roboto', sans-serif;
 	padding: 1rem 2rem;
 	resize: none;
+	border: ${({ isBorder }) => (isBorder ? '1px solid #4b6584' : 'none')};
 	&::placeholder {
 		color: #4b6584;
 	}
@@ -72,6 +75,7 @@ const ModalForm = styled.form`
 	position: relative;
 	overflow: hidden;
 	background-color: white;
+	border: 1px solid #4b6584;
 `;
 const SubmitButton = styled.button`
 	padding: 0.5rem 1rem;
@@ -84,6 +88,32 @@ const SubmitButton = styled.button`
 `;
 function Modal() {
 	const [isActivityClicked, setActivity] = useState(false);
+	const [isMenuClicked, setMenuData] = useState({
+		isOpen: false,
+		x: 0,
+		y: 0,
+		height: 0,
+	});
+
+	const handleSideMenuclick = (e) => {
+		if (!e.target.classList.contains('button-link')) {
+			console.log('to nie jest button link');
+
+			setMenuData({
+				...isMenuClicked,
+				isOpen: false,
+			});
+		} else {
+			const { x, y, height } = e.target.getBoundingClientRect();
+			setMenuData({
+				isOpen: !isMenuClicked.isOpen,
+				x,
+				y,
+				height,
+			});
+		}
+	};
+
 	const handleActivityChange = () => {
 		setActivity(!isActivityClicked);
 	};
@@ -106,8 +136,9 @@ function Modal() {
 	}, [isActivityClicked]);
 	return (
 		<Backdrop>
+			<NestedMenu isSideMenuClicked={isMenuClicked} buttonType="label" />
 			<ModalOuter>
-				<ModalInner className="innerModal">
+				<ModalInner onClick={handleSideMenuclick} className="innerModal">
 					<CardDetailsContainer>
 						<ModalTitle>YOUR TASK NAME</ModalTitle>
 						<>
@@ -115,7 +146,10 @@ function Modal() {
 								<DescriptionIcon style={{ height: '17px', width: '17px' }} />
 								<FieldName>Description</FieldName>
 							</AlignInOneLine>
-							<Textarea placeholder="Add a more detailed description" />
+							<Textarea
+								placeholder="Add a more detailed description"
+								isBorder={true}
+							/>
 						</>
 						<>
 							<AlignInOneLine>
@@ -133,11 +167,14 @@ function Modal() {
 									onFocus={handleActivityChange}
 									placeholder="Write a comment"
 									isActivity={true}
+									isBorder={false}
 								/>
 								<SubmitButton>Save</SubmitButton>
 							</ModalForm>
 						</>
 					</CardDetailsContainer>
+
+					<SideMenuModal handleSideMenuclick={handleSideMenuclick} />
 				</ModalInner>
 			</ModalOuter>
 		</Backdrop>
