@@ -6,7 +6,7 @@ import { compose } from 'redux';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
 import * as actions from '../../../store/actions';
-
+import useBoardIdFromUrl from '../../../customHooks/useBoardIdFromUrl';
 import InnerList from '../InnerList/InnerList';
 import AddNewCard from '../AddNewCard/AddNewCard';
 import Form from '../AddNewCard/AddNewCardForm/AddNewCardForm';
@@ -67,7 +67,7 @@ const Column = (props) => {
 	const [isClicked, setClicked] = useState(false);
 	const btnRef = React.useRef(null);
 	const formRef = React.useRef(null);
-	const currentBoardId = props.location.search.split('=')[1];
+	const currentBoardId = useBoardIdFromUrl(props.location);
 	const currentBoardColumns = props.boardState[currentBoardId].columns;
 	const currentColumnTitle = currentBoardColumns[props.column.id].title;
 
@@ -97,7 +97,7 @@ const Column = (props) => {
 								isDraggingOver={snapshot.isDraggingOver}
 								{...provided.droppableProps}
 							>
-								<InnerList tasks={props.cards} />
+								<InnerList cards={props.cards} />
 								{provided.placeholder}
 								<RelativeDiv>
 									<CSSTransition

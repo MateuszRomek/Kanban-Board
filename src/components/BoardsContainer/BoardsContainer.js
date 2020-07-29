@@ -30,7 +30,7 @@ const BoardsContainer = ({ currentBoard, onDragEnd, location }) => {
 			<Column index={index} column={column} key={columnId} cards={cards} />
 		);
 	});
-	console.log(columnArray);
+
 	return (
 		<DragDropContext onDragEnd={handleDragEnd}>
 			<Droppable droppableId="all-columns" direction="horizontal" type="column">

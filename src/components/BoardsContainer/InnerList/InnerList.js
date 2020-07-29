@@ -1,9 +1,13 @@
 import React from 'react';
 import Card from '../Card/Card';
+import { Link, useRouteMatch } from 'react-router-dom';
 
-const InnerList = ({ tasks }) => {
-	return tasks.map((card, index) => (
-		<Card index={index} key={card.id} taskId={card.id} title={card.title} />
+const InnerList = ({ cards }) => {
+	let { url } = useRouteMatch();
+	return cards.map((card, index) => (
+		<Link key={card.id} to={`${url}/t/${card.id}`}>
+			<Card index={index} taskId={card.id} title={card.title} />
+		</Link>
 	));
 };
 
