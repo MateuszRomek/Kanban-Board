@@ -76,6 +76,7 @@ const Navigation = (props) => {
 					</Link>
 					<CurrentTable>{props.boardName}</CurrentTable>
 					<NavButton isMargin={true}>Boards</NavButton>
+					<button onClick={props.test}>MODAL</button>
 				</FlexAlign>
 				<div>
 					<MainHeader>My Kanban Board</MainHeader>
