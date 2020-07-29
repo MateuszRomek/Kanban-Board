@@ -1,7 +1,7 @@
 import React, { useRef } from 'react';
 import styled from 'styled-components';
 import { CSSTransition } from 'react-transition-group';
-
+import { ReactComponent as CloseIcon } from '../../../../../../assets/icons/close.svg';
 const EditMenu = styled.div`
 	position: absolute;
 	left: 0;
@@ -36,9 +36,15 @@ const CloseButton = styled.button`
 	color: inherit;
 	background-color: transparent;
 	transition: background-color 0.3s, color 0.3s;
+	display: grid;
+	place-items: center;
 	&:hover {
 		background-color: #4c5b76;
 		color: white;
+	}
+	& svg {
+		height: 16px;
+		width: 16px;
 	}
 `;
 
@@ -62,7 +68,9 @@ const NestedEditMenu = ({ isEdit, handleEditMenu }) => {
 				<EditMenu ref={EditMenuRef} className="editMenu">
 					<EditMenuHeader>
 						<EditMenuParagraph>Change label</EditMenuParagraph>
-						<CloseButton onClick={handleEditMenu}> X</CloseButton>
+						<CloseButton onClick={handleEditMenu}>
+							<CloseIcon />
+						</CloseButton>
 					</EditMenuHeader>
 					<form>
 						<EditMenuLabel htmlFor="newLabelname"> Name </EditMenuLabel>

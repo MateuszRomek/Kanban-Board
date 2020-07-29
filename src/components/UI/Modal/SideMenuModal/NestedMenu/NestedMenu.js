@@ -13,6 +13,11 @@ const HiddenNestedMenu = styled.div`
 	top: ${({ height, y }) => y + height + 10 + 'px'};
 	pointer-events: ${({ isVisible }) => (isVisible ? 'all' : 'none')};
 	opacity: ${({ isVisible }) => (isVisible ? '1' : '0')};
+	z-index: 50;
+	@media (max-width: 1000px) {
+		left: calc(100% - 31.5rem);
+		box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
+	}
 `;
 const HiddenNestedMenuRelative = styled.div`
 	position: relative;

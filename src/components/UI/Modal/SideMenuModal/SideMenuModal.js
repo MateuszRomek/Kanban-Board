@@ -8,9 +8,12 @@ const ColumnContainer = styled.aside`
 	padding: 6.9rem 0rem 1rem 1rem;
 `;
 const ColumnTitle = styled.h3`
-	font-size: 16px;
+	font-size: 1.6rem;
 	font-weight: 400;
 	margin-bottom: 0;
+	@media (min-width: 320px) and (max-width: 480px) {
+		font-size: 1.4rem;
+	}
 `;
 const SideMenuButton = styled.button`
 	border: none;
