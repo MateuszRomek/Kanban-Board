@@ -4,10 +4,11 @@ import GlobalStyle from '../../assets/styles/GlobalStyle';
 import Navigation from '../../components/Navigation/Navigation';
 import SideMenu from '../../components/SideMenu/SideMenu';
 import BoardsContainer from '../../components/BoardsContainer/BoardsContainer';
-import { Redirect } from 'react-router-dom';
 import { connect } from 'react-redux';
 import * as actions from '../../store/actions';
-
+import Modal from '../../components/UI/Modal/Modal';
+import useBoardIdFromUrl from '../../customHooks/useBoardIdFromUrl';
+import { Redirect } from 'react-router-dom';
 const MainContainer = styled.div`
 	width: 100vw;
 	height: 100vh;
@@ -28,45 +29,48 @@ const ContentContainer = styled.div`
 
 function TableLayout(props) {
 	const { onModalClose } = props;
-	const [isMenuOpen, setModal] = useState(false);
+	const [isMenuOpen, setMenu] = useState(false);
+	const [isModalOpen, setModal] = useState(false);
 	const [currentBoard, setCurrentBoard] = useState(null);
-
-	const boardName = props.location.hash.slice(1);
-	const isBoardsArrayEmpty = props.boards.boards.length === 0;
-	useEffect(() => {
-		const boardId = props.location.search.split('=')[1];
-		setCurrentBoard(props.boards[boardId]);
-	}, [props.boards, props.location.search]);
-
-	const openModal = useCallback(() => setModal(true), []);
+	const boardId = useBoardIdFromUrl(props.location);
+	const isBoardArrayEmpy = props.boards.boards.length === 0;
+	const handleModalChange = () => setModal(!isModalOpen);
+	const openModal = useCallback(() => setMenu(true), []);
 	const closeModal = () => {
-		setModal(false);
+		setMenu(false);
 		onModalClose();
 	};
 
+	const boardData = props.boards.boards.find(({ id }) => {
+		return id === boardId;
+	});
+	const boardName = boardData ? boardData.name : 'null';
+
+	useEffect(() => {
+		setCurrentBoard(props.boards[boardId]);
+	}, [boardId, props.boards]);
+
 	return (
 		<div className="App">
+			{isBoardArrayEmpy && <Redirect to={'/'} />}
 			<GlobalStyle />
 			<Navigation
+				test={handleModalChange}
 				boardName={boardName}
 				openModal={openModal}
 				isMenuOpen={isMenuOpen}
 			/>
+			<Modal handleModalChange={handleModalChange} isOpen={isModalOpen} />
 			<MainContainer
 				background={currentBoard ? currentBoard.backgrounds.regular : null}
 			>
 				<ContentContainer>
 					<SideMenu isMenuOpen={isMenuOpen} closeModal={closeModal} />
 					{currentBoard && typeof currentBoard === 'object' && (
-						<BoardsContainer
-							isBoardsArrayEmpty={isBoardsArrayEmpty}
-							currentBoard={currentBoard}
-						/>
+						<BoardsContainer currentBoard={currentBoard} />
 					)}
 				</ContentContainer>
 			</MainContainer>
-
-			{isBoardsArrayEmpty ? <Redirect to="/" /> : null}
 		</div>
 	);
 }

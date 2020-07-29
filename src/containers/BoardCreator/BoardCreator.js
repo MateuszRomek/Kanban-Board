@@ -5,7 +5,6 @@ import CreateBoard from './CreateBoard/CreateBoard';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
 import GlobalStyle from '../../assets/styles/GlobalStyle';
-import Modal from '../../components/UI/Modal/Modal';
 const Container = styled.div`
 	width: 100vw;
 	height: 100vh;
@@ -52,9 +51,7 @@ const BoardsHome = ({ state }) => {
 		<Link
 			key={board.id}
 			to={{
-				pathname: '/board',
-				search: `?name=${board.id}`,
-				hash: `#${board.name}`,
+				pathname: `/board/name=${board.id}`,
 			}}
 			style={{ textDecoration: 'none' }}
 		>
@@ -65,7 +62,7 @@ const BoardsHome = ({ state }) => {
 	return (
 		<Container>
 			<GlobalStyle />
-			<Modal />
+
 			<AppHeader>My Kanban Board</AppHeader>
 			<BoardsInfo>
 				<BoardsHeader>Select your board!</BoardsHeader>
