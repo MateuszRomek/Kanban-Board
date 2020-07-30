@@ -21,6 +21,7 @@ const reducer = (state = initialState, action) => {
 			return {
 				...state,
 				searchBarLoading: action.isFetching,
+				error: null,
 			};
 		case types.REQUEST_PHOTOS_FINISH:
 			return {
@@ -33,6 +34,8 @@ const reducer = (state = initialState, action) => {
 			return {
 				...state,
 				error: action.error,
+				searchBarLoading: action.isFetching,
+				imagesList: action.payload,
 			};
 		default:
 			return {

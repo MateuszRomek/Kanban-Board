@@ -13,7 +13,9 @@ const startFetchBackgroundImg = () => ({
 
 const fetchBackgroundImageFail = (error) => ({
 	type: types.REQUEST_PHOTOS_FAIL,
+	isFetching: false,
 	error,
+	payload: [],
 });
 
 const finishFetchBackgroundImg = (data) => ({
@@ -29,7 +31,13 @@ export const fetchUnsplash = (searchValue) => {
 			`https://api.unsplash.com/search/collections/?client_id=lF2X9QbJxugtbhXVYRpvK2rMBWrX_4yAgmUQFhWCeGw&query="${searchValue}"`
 		)
 			.then((res) => res.json())
-			.then(({ results }) => dispatch(finishFetchBackgroundImg(results)))
+			.then(({ results }) => {
+				if (results.length === 0) {
+					dispatch(fetchBackgroundImageFail('Nothing found'));
+				} else {
+					dispatch(finishFetchBackgroundImg(results));
+				}
+			})
 			.catch((err) => {
 				dispatch(fetchBackgroundImageFail(err));
 				console.log(err);

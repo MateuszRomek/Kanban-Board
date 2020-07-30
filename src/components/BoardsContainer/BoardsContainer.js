@@ -6,20 +6,21 @@ import { connect } from 'react-redux';
 import { compose } from 'redux';
 import { withRouter } from 'react-router-dom';
 import * as actions from '../../store/actions';
-import { findBoardId } from '../../utils/findBoardId';
 import Column from './Column/Column';
 import AddNewColumn from './AddNewColumn/AddNewColumn';
-
+import useBoardIdFromUrl from '../../customHooks/useBoardIdFromUrl';
 const Container = styled.div`
 	display: flex;
+	overflow: auto;
+	overflow-y: hidden;
 	@media (min-width: 320px) and (max-width: 480px) {
 		overflow-x: scroll;
 	}
 `;
 
 const BoardsContainer = ({ currentBoard, onDragEnd, location }) => {
+	const boardId = useBoardIdFromUrl(location);
 	const handleDragEnd = (result) => {
-		const boardId = findBoardId(location);
 		onDragEnd(result, boardId);
 	};
 

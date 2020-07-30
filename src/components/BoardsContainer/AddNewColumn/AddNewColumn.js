@@ -1,12 +1,11 @@
 import React from 'react';
 import styled from 'styled-components';
 import AddButton from '../../UI/Buttons/AddButton/AddButton';
-
+import useBoardIdFromUrl from '../../../customHooks/useBoardIdFromUrl';
 import * as actions from '../../../store/actions';
 import { connect } from 'react-redux';
 import { compose } from 'redux';
 import { withRouter } from 'react-router-dom';
-import { findBoardId } from '../../../utils/findBoardId';
 const AddColumnHolder = styled.div`
 	padding: 2px 5px;
 	margin: 10px 15px;
@@ -50,9 +49,10 @@ const AddInformation = styled.p`
 `;
 
 const AddNewColumn = ({ addNewColumn, location }) => {
+	const boardId = useBoardIdFromUrl(location);
+
 	const handleFormSubmit = (e) => {
 		e.preventDefault();
-		const boardId = findBoardId(location);
 		const columnTitle = e.currentTarget.elements[0].value;
 		addNewColumn(boardId, columnTitle);
 

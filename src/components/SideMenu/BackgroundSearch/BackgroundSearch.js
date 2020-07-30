@@ -1,6 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
-
+import useBoardIdFromUrl from '../../../customHooks/useBoardIdFromUrl';
 import { connect } from 'react-redux';
 import { compose } from 'redux';
 import { withRouter } from 'react-router-dom';
@@ -82,7 +82,7 @@ const BackgroundSearch = (props) => {
 		error,
 		selectBackgroundImage,
 	} = props;
-	const boardId = props.location.search.split('=')[1];
+	const boardId = useBoardIdFromUrl(props.location);
 
 	const imgList = imagesList.map((image) => {
 		const regularUrl = image['preview_photos'][0].urls.regular;
@@ -143,7 +143,6 @@ const mapDispatchToProps = (dispatch) => {
 	};
 };
 
-//export default connect(mapStateToProps, mapDispatchToProps)(BackgroundSearch);
 export default compose(
 	connect(mapStateToProps, mapDispatchToProps),
 	withRouter

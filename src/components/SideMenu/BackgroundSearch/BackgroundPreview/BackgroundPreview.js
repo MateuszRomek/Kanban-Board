@@ -7,7 +7,7 @@ const Container = styled.div`
 	border-radius: 5px;
 	background-color: black;
 	overflow: hidden;
-
+	cursor: pointer;
 	& img {
 		width: 100%;
 		height: 100%;
