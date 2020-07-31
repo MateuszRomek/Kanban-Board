@@ -8,9 +8,11 @@ const CardItem = styled.div`
 	margin-bottom: 8px;
 	border-radius: 4px;
 	padding: 1rem 1.3rem;
-
 	background-color: white;
 	box-shadow: 0 1px 5px rgba(0, 0, 0, 0.16), 0 1px 1px rgba(0, 0, 0, 0.23);
+	&: hover {
+		cursor: pointer;
+	}
 `;
 const Card = (props) => {
 	return (

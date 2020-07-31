@@ -1,9 +1,10 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import styled from 'styled-components';
 import { ReactComponent as DescriptionIcon } from '../../../assets/icons/description.svg';
 import { ReactComponent as ToDoListIcon } from '../../../assets/icons/todolist.svg';
 import { ReactComponent as CommentsIcon } from '../../../assets/icons/comment-solid.svg';
 import { useEffect } from 'react';
+import { ModalContext } from '../../../context/ModalContext';
 import SideMenuModal from './SideMenuModal/SideMenuModal';
 import NestedMenu from './SideMenuModal/NestedMenu/NestedMenu';
 import GreenButton from './ModalButtons/GreenButton';
@@ -125,7 +126,7 @@ const Comment = styled.p`
 	border-radius: 5px;
 	border: 1px solid rgba(55, 60, 63, 0.3);
 `;
-function Modal({ isOpen, handleModalChange }) {
+function Modal() {
 	const [isActivityClicked, setActivity] = useState(false);
 	const [isMenuClicked, setMenuData] = useState({
 		isOpen: false,
@@ -133,7 +134,10 @@ function Modal({ isOpen, handleModalChange }) {
 		y: 0,
 		height: 0,
 	});
-
+	const { isModalOpen, handleModalChange, openedTask } = useContext(
+		ModalContext
+	);
+	// TODO ogarna opened task do danych w modalu.
 	const handleSideMenuclick = (e) => {
 		if (!e.target.classList.contains('button-link')) {
 			setMenuData({
@@ -186,10 +190,10 @@ function Modal({ isOpen, handleModalChange }) {
 		<Backdrop
 			onClick={handleOutsideModalClick}
 			className="backdrop"
-			isOpen={isOpen}
+			isOpen={isModalOpen}
 		>
 			<NestedMenu isSideMenuClicked={isMenuClicked} buttonType="label" />
-			<ModalOuter isOpen={isOpen}>
+			<ModalOuter isOpen={isModalOpen}>
 				<ModalInner onClick={handleSideMenuclick} className="innerModal">
 					<CardDetailsContainer>
 						{/* TODO dodać value oraz onchange taska */}

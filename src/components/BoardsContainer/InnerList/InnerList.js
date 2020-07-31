@@ -1,8 +1,8 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import Card from '../Card/Card';
 import { Link, useRouteMatch } from 'react-router-dom';
 import styled from 'styled-components';
-
+import { ModalContext } from '../../../context/ModalContext';
 const LinkWrapper = styled.div`
 	& a {
 		text-decoration: none;
@@ -11,8 +11,13 @@ const LinkWrapper = styled.div`
 `;
 const InnerList = ({ cards }) => {
 	let { url } = useRouteMatch();
+	const { handleModalChange, handleTaskChoose } = useContext(ModalContext);
+	const handleCardClick = (card) => {
+		handleTaskChoose(card);
+		handleModalChange();
+	};
 	return cards.map((card, index) => (
-		<LinkWrapper key={card.id}>
+		<LinkWrapper onClick={() => handleCardClick(card)} key={card.id}>
 			<Link to={`${url}/t/${card.id}`}>
 				<Card index={index} taskId={card.id} title={card.title} />
 			</Link>{' '}

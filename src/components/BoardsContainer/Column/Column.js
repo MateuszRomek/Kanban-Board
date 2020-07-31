@@ -10,6 +10,8 @@ import useBoardIdFromUrl from '../../../customHooks/useBoardIdFromUrl';
 import InnerList from '../InnerList/InnerList';
 import AddNewCard from '../AddNewCard/AddNewCard';
 import Form from '../AddNewCard/AddNewCardForm/AddNewCardForm';
+
+//TODO poczytać o scrluu w droppable
 const Container = styled.div`
 	align-self: flex-start;
 	padding: 3px 6px;
@@ -18,8 +20,6 @@ const Container = styled.div`
 	border-radius: 4px;
 	min-width: 30rem;
 	max-height: 75rem;
-	overflow-y: auto;
-	overflow-x: hidden;
 	display: flex;
 	flex-direction: column;
 	background-color: #ebecf0;

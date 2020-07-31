@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import GlobalStyle from '../../assets/styles/GlobalStyle';
 import Navigation from '../../components/Navigation/Navigation';
@@ -9,6 +9,7 @@ import * as actions from '../../store/actions';
 import Modal from '../../components/UI/Modal/Modal';
 import useBoardIdFromUrl from '../../customHooks/useBoardIdFromUrl';
 import { Redirect } from 'react-router-dom';
+import ModalContextProvider from '../../context/ModalContext';
 const MainContainer = styled.div`
 	width: 100vw;
 	height: 100vh;
@@ -28,17 +29,14 @@ const ContentContainer = styled.div`
 `;
 
 function TableLayout(props) {
-	const { onModalClose } = props;
+	const { onSideMenuClose } = props;
 	const [isMenuOpen, setMenu] = useState(false);
-	const [isModalOpen, setModal] = useState(false);
 	const [currentBoard, setCurrentBoard] = useState(null);
 	const boardId = useBoardIdFromUrl(props.location);
 	const isBoardArrayEmpy = props.boards.boards.length === 0;
-	const handleModalChange = () => setModal(!isModalOpen);
-	const openModal = useCallback(() => setMenu(true), []);
 	const closeModal = () => {
 		setMenu(false);
-		onModalClose();
+		onSideMenuClose();
 	};
 
 	const boardData = props.boards.boards.find(({ id }) => {
@@ -54,23 +52,20 @@ function TableLayout(props) {
 		<div className="App">
 			{isBoardArrayEmpy && <Redirect to={'/'} />}
 			<GlobalStyle />
-			<Navigation
-				test={handleModalChange}
-				boardName={boardName}
-				openModal={openModal}
-				isMenuOpen={isMenuOpen}
-			/>
-			<Modal handleModalChange={handleModalChange} isOpen={isModalOpen} />
-			<MainContainer
-				background={currentBoard ? currentBoard.backgrounds.regular : null}
-			>
-				<ContentContainer>
-					<SideMenu isMenuOpen={isMenuOpen} closeModal={closeModal} />
-					{currentBoard && typeof currentBoard === 'object' && (
-						<BoardsContainer currentBoard={currentBoard} />
-					)}
-				</ContentContainer>
-			</MainContainer>
+			<Navigation boardName={boardName} isMenuOpen={isMenuOpen} />
+			<ModalContextProvider>
+				<Modal />
+				<MainContainer
+					background={currentBoard ? currentBoard.backgrounds.regular : null}
+				>
+					<ContentContainer>
+						<SideMenu isMenuOpen={isMenuOpen} closeModal={closeModal} />
+						{currentBoard && typeof currentBoard === 'object' && (
+							<BoardsContainer currentBoard={currentBoard} />
+						)}
+					</ContentContainer>
+				</MainContainer>
+			</ModalContextProvider>
 		</div>
 	);
 }
@@ -82,7 +77,7 @@ const mapStateToProps = (state) => {
 };
 const mapDispatchToProps = (dispatch) => {
 	return {
-		onModalClose: () => dispatch(actions.resetImageList()),
+		onSideMenuClose: () => dispatch(actions.resetImageList()),
 	};
 };
 
