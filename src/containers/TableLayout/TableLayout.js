@@ -54,7 +54,7 @@ function TableLayout(props) {
 			<GlobalStyle />
 			<Navigation boardName={boardName} isMenuOpen={isMenuOpen} />
 			<ModalContextProvider>
-				<Modal />
+				<Modal boardId={boardId} />
 				<MainContainer
 					background={currentBoard ? currentBoard.backgrounds.regular : null}
 				>

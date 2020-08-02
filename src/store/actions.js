@@ -53,7 +53,14 @@ export const addNewCard = (cardTitle, boardId, columnId) => {
 		columnId,
 	};
 };
-
+export const removeCard = (boardId, cardId, columnId) => {
+	return {
+		type: types.REMOVE_CARD,
+		boardId,
+		cardId,
+		columnId,
+	};
+};
 export const createNewBoard = (userBoardName) => {
 	return {
 		type: types.ADD_NEW_BOARD,
@@ -79,6 +86,14 @@ export const changeColumnTitle = (newColumnTitle, boardId, columnId) => {
 	};
 };
 
+export const removeColumn = (boardId, columnId) => {
+	return {
+		type: types.REMOVE_COLUMN,
+		columnId,
+		boardId,
+	};
+};
+
 export const onDragEnd = (result, boardId) => {
 	return {
 		type: types.ON_DRAG_END,
@@ -92,5 +107,23 @@ export const addNewColumn = (boardId, columnTitle) => {
 		type: types.ADD_NEW_COLUMN,
 		boardId,
 		columnTitle,
+	};
+};
+
+export const addNewComment = (cardId, boardId, commentContent) => {
+	return {
+		type: types.ADD_NEW_COMMENT,
+		cardId,
+		boardId,
+		commentContent,
+	};
+};
+
+export const removeComment = (commentId, boardId, cardId) => {
+	return {
+		type: types.REMOVE_COMMENT,
+		commentId,
+		boardId,
+		cardId,
 	};
 };

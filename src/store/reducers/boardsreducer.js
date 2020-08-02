@@ -31,7 +31,10 @@ const reducer = (state = initialState, action) => {
 					'card-1': {
 						id: 'card-1',
 						title: 'Go out',
-						content: 'Take out the garbage',
+						labels: [],
+						comments: [],
+						description: '',
+						todolist: [],
 					},
 				},
 				columns: {
@@ -60,7 +63,10 @@ const reducer = (state = initialState, action) => {
 				[newCardId]: {
 					id: newCardId,
 					title: action.cardTitle,
-					content: '',
+					labels: [],
+					comments: [],
+					description: '',
+					todolist: [],
 				},
 			};
 			currentBoard.cards = newCards;
@@ -83,7 +89,30 @@ const reducer = (state = initialState, action) => {
 				...state,
 				[action.boardId]: { ...currentBoard },
 			};
+		case types.REMOVE_CARD:
+			const cardsCopy = { ...state[action.boardId].cards };
+			delete cardsCopy[action.cardId];
+			const columnCardId = [
+				...state[action.boardId].columns[action.columnId].cardsIds,
+			];
+			const newColumnCardIds = columnCardId.filter(
+				(card) => card !== action.cardId
+			);
 
+			return {
+				...state,
+				[action.boardId]: {
+					...state[action.boardId],
+					cards: cardsCopy,
+					columns: {
+						...state[action.boardId].columns,
+						[action.columnId]: {
+							...state[action.boardId].columns[action.columnId],
+							cardsIds: newColumnCardIds,
+						},
+					},
+				},
+			};
 		case types.SET_BACKGROUND_IMAGE:
 			return {
 				...state,
@@ -120,6 +149,23 @@ const reducer = (state = initialState, action) => {
 					},
 				},
 			};
+		case types.REMOVE_COLUMN:
+			const boardColumns = { ...state[action.boardId].columns };
+			delete boardColumns[`${action.columnId}`];
+
+			const orderCopy = [...state[action.boardId].columnOrder];
+			const columnIndex = orderCopy.findIndex((c) => c === action.columnId);
+			orderCopy.splice(columnIndex, 1);
+
+			return {
+				...state,
+				[action.boardId]: {
+					...state[action.boardId],
+					columns: boardColumns,
+					columnOrder: orderCopy,
+				},
+			};
+
 		case types.ADD_NEW_COLUMN:
 			if (action.columnTitle === '') return { ...state };
 			const newColumnId = uuidv4();
@@ -195,6 +241,47 @@ const reducer = (state = initialState, action) => {
 				},
 			};
 
+		case types.ADD_NEW_COMMENT:
+			const { boardId, cardId, commentContent } = action;
+			if (commentContent === '') return { ...state };
+			const cardCopy = { ...state[boardId].cards[cardId] };
+			const newComment = {
+				id: uuidv4(),
+				content: commentContent,
+			};
+			cardCopy.comments.push(newComment);
+			cardCopy.comments.reverse();
+
+			return {
+				...state,
+				[boardId]: {
+					...state[boardId],
+					cards: {
+						...state[boardId].cards,
+						[cardId]: cardCopy,
+					},
+				},
+			};
+
+		case types.REMOVE_COMMENT: {
+			const { boardId, commentId, cardId } = action;
+			const cardCopy = { ...state[boardId].cards[cardId] };
+			const commentIndex = cardCopy.comments.findIndex(
+				(comment) => comment.id === commentId
+			);
+			cardCopy.comments.splice(commentIndex, 1);
+
+			return {
+				...state,
+				[boardId]: {
+					...state[boardId],
+					cards: {
+						...state[boardId].cards,
+						[cardId]: cardCopy,
+					},
+				},
+			};
+		}
 		default:
 			return {
 				...state,

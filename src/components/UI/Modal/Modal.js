@@ -1,14 +1,17 @@
-import React, { useState, useContext } from 'react';
+import React, { useState, useContext, useEffect } from 'react';
 import styled from 'styled-components';
 import { ReactComponent as DescriptionIcon } from '../../../assets/icons/description.svg';
 import { ReactComponent as ToDoListIcon } from '../../../assets/icons/todolist.svg';
 import { ReactComponent as CommentsIcon } from '../../../assets/icons/comment-solid.svg';
-import { useEffect } from 'react';
+import { withRouter } from 'react-router-dom';
 import { ModalContext } from '../../../context/ModalContext';
+import { compose } from 'redux';
+import { connect } from 'react-redux';
 import SideMenuModal from './SideMenuModal/SideMenuModal';
 import NestedMenu from './SideMenuModal/NestedMenu/NestedMenu';
 import GreenButton from './ModalButtons/GreenButton';
 import ToDoList from './ToDoList/ToDoList';
+import * as actions from '../../../store/actions';
 const Backdrop = styled.div`
 	position: fixed;
 	display: flex;
@@ -62,6 +65,7 @@ const CardDetailsContainer = styled.div`
 		border-radius: 20px;
 	}
 `;
+
 const ModalInputTitle = styled.input.attrs({ type: 'text' })`
 	color: inherit;
 	border: none;
@@ -119,14 +123,33 @@ const CommentsContainer = styled.div`
 	color: rgb(55, 60, 63);
 `;
 const Comment = styled.p`
-	margin: 0.8rem 0;
+	position: relative;
+	margin: ${({ isFirst }) =>
+		isFirst ? '0rem 0rem 2rem 0rem' : '2.5rem 0rem 2rem 0rem'};
 	width: 100%;
-	padding: 1rem 0.6rem;
+	padding: 1rem;
 	background-color: white;
+	font-size: 1.4rem;
 	border-radius: 5px;
 	border: 1px solid rgba(55, 60, 63, 0.3);
 `;
-function Modal() {
+
+const DeleteComment = styled.span`
+	position: absolute;
+	left: 0;
+	bottom: -2rem;
+	color: inherit;
+	font-size: 1.1rem;
+	font-weight: 400;
+	text-decoration: underline;
+`;
+const Modal = ({
+	history,
+	location,
+	addNewComment,
+	boardId,
+	removeComment,
+}) => {
 	const [isActivityClicked, setActivity] = useState(false);
 	const [isMenuClicked, setMenuData] = useState({
 		isOpen: false,
@@ -134,10 +157,9 @@ function Modal() {
 		y: 0,
 		height: 0,
 	});
-	const { isModalOpen, handleModalChange, openedTask } = useContext(
+	const { isModalOpen, handleModalChange, openedTask, taskColumn } = useContext(
 		ModalContext
 	);
-	// TODO ogarna opened task do danych w modalu.
 	const handleSideMenuclick = (e) => {
 		if (!e.target.classList.contains('button-link')) {
 			setMenuData({
@@ -157,6 +179,7 @@ function Modal() {
 	};
 	const handleOutsideModalClick = (e) => {
 		if (e.target.classList.contains('backdrop')) {
+			history.goBack();
 			handleModalChange();
 			setMenuData({
 				...isMenuClicked,
@@ -186,6 +209,14 @@ function Modal() {
 			});
 		};
 	}, [isActivityClicked]);
+
+	const handleFormSubmit = (e) => {
+		e.preventDefault();
+		const commentContent = e.target.elements['content'].value;
+		addNewComment(openedTask.id, boardId, commentContent);
+		e.target.reset();
+	};
+
 	return (
 		<Backdrop
 			onClick={handleOutsideModalClick}
@@ -197,13 +228,14 @@ function Modal() {
 				<ModalInner onClick={handleSideMenuclick} className="innerModal">
 					<CardDetailsContainer>
 						{/* TODO dodać value oraz onchange taska */}
-						<ModalInputTitle />
+						<ModalInputTitle value={(openedTask && openedTask.title) || ''} />
 						<>
 							<AlignInOneLine>
 								<DescriptionIcon />
 								<FieldName>Description</FieldName>
 							</AlignInOneLine>
 							<Textarea
+								value={(openedTask && openedTask.description) || ''}
 								placeholder="Add a more detailed description"
 								isBorder={true}
 							/>
@@ -223,27 +255,58 @@ function Modal() {
 								<FieldName>Comments</FieldName>
 							</AlignInOneLine>
 
-							<ModalForm isActivityClicked={isActivityClicked}>
+							<ModalForm
+								onSubmit={handleFormSubmit}
+								isActivityClicked={isActivityClicked}
+							>
 								<Textarea
+									name="content"
 									className="activity"
 									onFocus={handleActivityChange}
 									placeholder="Write a comment"
 									isActivity={true}
 									isBorder={false}
 								/>
-								<GreenButton text={'Save'} />
+								<GreenButton type="submit" text={'Save'} />
 							</ModalForm>
 							<CommentsContainer>
-								<Comment>Dupa</Comment>
+								{openedTask &&
+									openedTask.comments.map((comment, index) => (
+										<Comment isFirst={index === 0} key={comment.id}>
+											{comment.content}{' '}
+											<DeleteComment
+												onClick={() =>
+													removeComment(comment.id, boardId, openedTask.id)
+												}
+											>
+												Delete
+											</DeleteComment>
+										</Comment>
+									))}
 							</CommentsContainer>
 						</>
 					</CardDetailsContainer>
 
-					<SideMenuModal handleSideMenuclick={handleSideMenuclick} />
+					<SideMenuModal
+						boardId={boardId}
+						handleModalChange={handleModalChange}
+						taskColumn={taskColumn}
+						location={location}
+						cardId={(openedTask && openedTask.id) || null}
+						handleSideMenuclick={handleSideMenuclick}
+					/>
 				</ModalInner>
 			</ModalOuter>
 		</Backdrop>
 	);
-}
+};
+const mapDispatchToProps = (dispatch) => {
+	return {
+		addNewComment: (cardId, boardId, commentContent) =>
+			dispatch(actions.addNewComment(cardId, boardId, commentContent)),
 
-export default Modal;
+		removeComment: (commentId, boardId, cardId) =>
+			dispatch(actions.removeComment(commentId, boardId, cardId)),
+	};
+};
+export default compose(withRouter, connect(null, mapDispatchToProps))(Modal);

@@ -1,7 +1,9 @@
 import React from 'react';
 import styled from 'styled-components';
-
+import { connect } from 'react-redux';
+import * as actions from '../../../../store/actions';
 import { ReactComponent as LabelIcon } from '../../../../assets/icons/label.svg';
+import { ReactComponent as TrashIcon } from '../../../../assets/icons/trash.svg';
 const ColumnContainer = styled.aside`
 	display: flex;
 	flex-direction: column;
@@ -27,24 +29,44 @@ const SideMenuButton = styled.button`
 	align-items: center;
 	justify-content: flex-start;
 	width: 100%;
+
+	& svg {
+		height: 1.4rem;
+		width: 1.4rem;
+		margin-right: 1.6rem;
+	}
 `;
 
-const SideMenuHolder = styled.div``;
-
-function SideMenuModal({ handleSideMenuclick }) {
+function SideMenuModal({
+	handleSideMenuclick,
+	cardId,
+	boardId,
+	removeCard,
+	taskColumn,
+	handleModalChange,
+}) {
+	const handleDeletCard = () => {
+		handleModalChange();
+		removeCard(boardId, cardId, taskColumn);
+	};
 	return (
 		<ColumnContainer>
 			<ColumnTitle>Add to card</ColumnTitle>
-			<SideMenuHolder>
-				<SideMenuButton className="button-link">
-					<LabelIcon
-						style={{ height: '14px', width: '14px', marginRight: '16px' }}
-					/>
-					Label
-				</SideMenuButton>
-			</SideMenuHolder>
+			<SideMenuButton className="button-link">
+				<LabelIcon />
+				Label
+			</SideMenuButton>
+			<ColumnTitle>Actions</ColumnTitle>
+			<SideMenuButton onClick={handleDeletCard}>
+				<TrashIcon /> Delete
+			</SideMenuButton>
 		</ColumnContainer>
 	);
 }
-
-export default SideMenuModal;
+const mapDispatchToProps = (dispatch) => {
+	return {
+		removeCard: (boardId, cardId, columnId) =>
+			dispatch(actions.removeCard(boardId, cardId, columnId)),
+	};
+};
+export default connect(null, mapDispatchToProps)(SideMenuModal);
