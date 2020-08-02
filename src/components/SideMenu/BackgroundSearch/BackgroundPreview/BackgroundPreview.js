@@ -13,6 +13,9 @@ const Container = styled.div`
 		height: 100%;
 		object-fit: cover;
 	}
+	@media (min-width: 320px) and (max-width: 480px) {
+		width: 100%;
+	}
 `;
 
 const BackgroundPreview = ({ imgUrl, alt, click }) => {

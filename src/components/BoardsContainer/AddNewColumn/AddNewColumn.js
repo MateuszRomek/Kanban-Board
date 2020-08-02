@@ -17,6 +17,17 @@ const AddColumnHolder = styled.div`
 	display: flex;
 	flex-direction: column;
 	align-items: center;
+	position: relative;
+	@media (min-width: 320px) and (max-width: 480px) {
+		&::after {
+			content: '';
+			position: absolute;
+			top: 0;
+			right: -1rem;
+			width: 1rem;
+			height: 0.1rem;
+		}
+	}
 `;
 const FormHolder = styled.form`
 	display: flex;

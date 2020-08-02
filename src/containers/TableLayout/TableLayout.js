@@ -38,6 +38,7 @@ function TableLayout(props) {
 		setMenu(false);
 		onSideMenuClose();
 	};
+	const openModal = () => setMenu(true);
 
 	const boardData = props.boards.boards.find(({ id }) => {
 		return id === boardId;
@@ -52,7 +53,11 @@ function TableLayout(props) {
 		<div className="App">
 			{isBoardArrayEmpy && <Redirect to={'/'} />}
 			<GlobalStyle />
-			<Navigation boardName={boardName} isMenuOpen={isMenuOpen} />
+			<Navigation
+				openModal={openModal}
+				boardName={boardName}
+				isMenuOpen={isMenuOpen}
+			/>
 			<ModalContextProvider>
 				<Modal boardId={boardId} />
 				<MainContainer

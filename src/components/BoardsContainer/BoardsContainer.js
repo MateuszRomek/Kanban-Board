@@ -15,6 +15,7 @@ const Container = styled.div`
 	overflow-y: hidden;
 	@media (min-width: 320px) and (max-width: 480px) {
 		overflow-x: scroll;
+		padding: 0 1rem;
 	}
 `;
 
