@@ -5,12 +5,20 @@ export const ModalContext = createContext();
 const ModalContextProvider = ({ children }) => {
 	const [isModalOpen, setModal] = useState(false);
 	const [openedTask, setTask] = useState(null);
+	const [taskColumn, setTaskColumn] = useState(null);
 	const handleModalChange = () => setModal(!isModalOpen);
 	const handleTaskChoose = (task) => setTask(task);
-	console.log(openedTask);
+	const handleTaskColumn = (columnId) => setTaskColumn(columnId);
 	return (
 		<ModalContext.Provider
-			value={{ isModalOpen, handleModalChange, handleTaskChoose, openedTask }}
+			value={{
+				isModalOpen,
+				handleModalChange,
+				handleTaskChoose,
+				openedTask,
+				taskColumn,
+				handleTaskColumn,
+			}}
 		>
 			{children}
 		</ModalContext.Provider>
