@@ -1,3 +1,4 @@
+import { ReactComponent as TrashIcon } from '../../../assets/icons/trash.svg';
 import React, { useState } from 'react';
 import { Droppable, Draggable } from 'react-beautiful-dnd';
 import { CSSTransition } from 'react-transition-group';
@@ -24,9 +25,24 @@ const Container = styled.div`
 	flex-direction: column;
 	background-color: #ebecf0;
 `;
-
+const RemoveButton = styled.button`
+	display: inline-block;
+	padding: 0;
+	height: 1.6rem;
+	width: 1.6rem;
+	border: none;
+	margin-left: 1rem;
+	background: transparent;
+	& svg {
+		width: 100%;
+		height: 100%;
+	}
+`;
 const ColumnTitleHolder = styled.div`
-	padding: 1rem;
+	padding: 1rem 1.5rem 1rem 1rem;
+	display: flex;
+	align-items: center;
+	justify-content: flex-start;
 `;
 
 const TaskList = styled.div`
@@ -52,7 +68,7 @@ const AddNewContainer = styled.div`
 `;
 
 const TextArea = styled.textarea`
-	width: 95%;
+	width: 90%;
 	padding: 0.5rem;
 	border: none;
 	background-color: transparent;
@@ -61,6 +77,7 @@ const TextArea = styled.textarea`
 	height: 3rem;
 	word-break: break-all;
 	overflow: hidden;
+	font-weight: bold;
 `;
 
 const Column = (props) => {
@@ -89,6 +106,13 @@ const Column = (props) => {
 							value={currentColumnTitle}
 							onChange={handleColumnTitleChange}
 						/>
+						<RemoveButton
+							onClick={() =>
+								props.removeColumn(currentBoardId, props.column.id)
+							}
+						>
+							<TrashIcon />
+						</RemoveButton>
 					</ColumnTitleHolder>
 					<Droppable type="task" droppableId={props.column.id}>
 						{(provided, snapshot) => (
@@ -97,7 +121,7 @@ const Column = (props) => {
 								isDraggingOver={snapshot.isDraggingOver}
 								{...provided.droppableProps}
 							>
-								<InnerList cards={props.cards} />
+								<InnerList columnId={props.column.id} cards={props.cards} />
 								{provided.placeholder}
 								<RelativeDiv>
 									<CSSTransition
@@ -143,6 +167,8 @@ const mapDispatchToProps = (dispatch) => {
 	return {
 		textareaChange: (newColumnTitle, boardId, columnId) =>
 			dispatch(actions.changeColumnTitle(newColumnTitle, boardId, columnId)),
+		removeColumn: (boardId, columnId) =>
+			dispatch(actions.removeColumn(boardId, columnId)),
 	};
 };
 

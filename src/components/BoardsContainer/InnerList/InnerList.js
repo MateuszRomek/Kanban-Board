@@ -9,10 +9,13 @@ const LinkWrapper = styled.div`
 		color: black;
 	}
 `;
-const InnerList = ({ cards }) => {
+const InnerList = ({ cards, columnId }) => {
 	let { url } = useRouteMatch();
-	const { handleModalChange, handleTaskChoose } = useContext(ModalContext);
+	const { handleModalChange, handleTaskChoose, handleTaskColumn } = useContext(
+		ModalContext
+	);
 	const handleCardClick = (card) => {
+		handleTaskColumn(columnId);
 		handleTaskChoose(card);
 		handleModalChange();
 	};
@@ -20,7 +23,7 @@ const InnerList = ({ cards }) => {
 		<LinkWrapper onClick={() => handleCardClick(card)} key={card.id}>
 			<Link to={`${url}/t/${card.id}`}>
 				<Card index={index} taskId={card.id} title={card.title} />
-			</Link>{' '}
+			</Link>
 		</LinkWrapper>
 	));
 };
