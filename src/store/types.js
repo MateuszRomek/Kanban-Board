@@ -15,3 +15,8 @@ export const ON_DRAG_END = 'ON_DRAG_END';
 
 export const ADD_NEW_COMMENT = 'ADD_NEW_COMMENT';
 export const REMOVE_COMMENT = 'REMOVE_COMMENT';
+export const SET_CARD_DATA_ON_CLOSE = 'SET_CARD_DATA_ON_CLOSE';
+
+export const ADD_NEW_TODO = 'ADD_NEW_TODO';
+export const CHECK_CHANGE_TODO = 'CHECK_CHANGE_TODO';
+export const REMOVE_TODO = 'REMOVE_TODO';

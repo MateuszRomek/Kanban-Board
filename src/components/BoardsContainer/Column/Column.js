@@ -12,7 +12,6 @@ import InnerList from '../InnerList/InnerList';
 import AddNewCard from '../AddNewCard/AddNewCard';
 import Form from '../AddNewCard/AddNewCardForm/AddNewCardForm';
 
-//TODO poczytać o scrluu w droppable
 const Container = styled.div`
 	align-self: flex-start;
 	padding: 3px 6px;

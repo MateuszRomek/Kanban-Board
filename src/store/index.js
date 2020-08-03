@@ -3,7 +3,6 @@ import thunk from 'redux-thunk';
 
 import SideMenuReducer from './reducers/sidemenureducer';
 import BoardsReducer from './reducers/boardsreducer';
-//import BoardsReducer from '../containers/BoardCreator/duck/reducer';
 const rootReducer = combineReducers({
 	SideMenuReducer,
 	BoardsReducer,

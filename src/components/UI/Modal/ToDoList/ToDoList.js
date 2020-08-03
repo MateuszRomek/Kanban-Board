@@ -1,6 +1,8 @@
 import React from 'react';
 import styled from 'styled-components';
 import GreenButton from '../ModalButtons/GreenButton';
+import { ReactComponent as TrashIcon } from '../../../../assets/icons/trash.svg';
+
 const AddNewTaskForm = styled.form`
 	width: 100%;
 	display: flex;
@@ -43,20 +45,39 @@ const Checkbox = styled.input.attrs({ type: 'checkbox' })`
 		text-decoration: line-through;
 	}
 `;
+const DeleteIconHolder = styled.span`
+	display: inline-block;
+	margin-left: auto;
+	align-self: flex-start;
+	& svg {
+		width: 1.4rem;
+		height: 1.4rem;
+	}
+`;
 
-const ToDoList = () => {
+const ToDoList = ({
+	handleToDoDelete,
+	handleToDoAdd,
+	todolist,
+	handleCheckToDo,
+}) => {
 	return (
 		<div>
 			<TaskList>
-				<TaskItem>
-					<Checkbox />
-					<TaskItemText>
-						Dupa jasiasksdfahjgjkdfshgjkdfhsjkghdkh dskjhskjfhsdkjfh
-						skdjfhsdkjfhsdkjhfskja
-					</TaskItemText>
-				</TaskItem>
+				{todolist.map((todo) => (
+					<TaskItem key={todo.id}>
+						<Checkbox
+							onChange={() => handleCheckToDo(todo.id)}
+							checked={todo.checked}
+						/>
+						<TaskItemText>{todo.content}</TaskItemText>
+						<DeleteIconHolder onClick={() => handleToDoDelete(todo.id)}>
+							<TrashIcon />
+						</DeleteIconHolder>
+					</TaskItem>
+				))}
 			</TaskList>
-			<AddNewTaskForm>
+			<AddNewTaskForm onSubmit={handleToDoAdd}>
 				<FormInput placeholder="Add an element" />
 				<GreenButton text="Add" type="submit" />
 			</AddNewTaskForm>

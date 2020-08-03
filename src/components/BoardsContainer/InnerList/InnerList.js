@@ -3,6 +3,7 @@ import Card from '../Card/Card';
 import { Link, useRouteMatch } from 'react-router-dom';
 import styled from 'styled-components';
 import { ModalContext } from '../../../context/ModalContext';
+
 const LinkWrapper = styled.div`
 	& a {
 		text-decoration: none;
@@ -17,6 +18,7 @@ const InnerList = ({ cards, columnId }) => {
 	const handleCardClick = (card) => {
 		handleTaskColumn(columnId);
 		handleTaskChoose(card);
+
 		handleModalChange();
 	};
 	return cards.map((card, index) => (

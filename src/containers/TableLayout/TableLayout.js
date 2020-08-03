@@ -6,7 +6,6 @@ import SideMenu from '../../components/SideMenu/SideMenu';
 import BoardsContainer from '../../components/BoardsContainer/BoardsContainer';
 import { connect } from 'react-redux';
 import * as actions from '../../store/actions';
-import Modal from '../../components/UI/Modal/Modal';
 import useBoardIdFromUrl from '../../customHooks/useBoardIdFromUrl';
 import { Redirect } from 'react-router-dom';
 import ModalContextProvider from '../../context/ModalContext';
@@ -39,7 +38,6 @@ function TableLayout(props) {
 		onSideMenuClose();
 	};
 	const openModal = () => setMenu(true);
-
 	const boardData = props.boards.boards.find(({ id }) => {
 		return id === boardId;
 	});
@@ -59,14 +57,13 @@ function TableLayout(props) {
 				isMenuOpen={isMenuOpen}
 			/>
 			<ModalContextProvider>
-				<Modal boardId={boardId} />
 				<MainContainer
 					background={currentBoard ? currentBoard.backgrounds.regular : null}
 				>
 					<ContentContainer>
 						<SideMenu isMenuOpen={isMenuOpen} closeModal={closeModal} />
 						{currentBoard && typeof currentBoard === 'object' && (
-							<BoardsContainer currentBoard={currentBoard} />
+							<BoardsContainer boardId={boardId} currentBoard={currentBoard} />
 						)}
 					</ContentContainer>
 				</MainContainer>

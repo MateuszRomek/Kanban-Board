@@ -12,6 +12,7 @@ import NestedMenu from './SideMenuModal/NestedMenu/NestedMenu';
 import GreenButton from './ModalButtons/GreenButton';
 import ToDoList from './ToDoList/ToDoList';
 import * as actions from '../../../store/actions';
+import { v4 as uuidv4 } from 'uuid';
 const Backdrop = styled.div`
 	position: fixed;
 	display: flex;
@@ -149,17 +150,27 @@ const Modal = ({
 	addNewComment,
 	boardId,
 	removeComment,
+	setCardDataOnModalClose,
 }) => {
-	const [isActivityClicked, setActivity] = useState(false);
 	const [isMenuClicked, setMenuData] = useState({
 		isOpen: false,
 		x: 0,
 		y: 0,
 		height: 0,
 	});
+
+	const [isActivityClicked, setActivity] = useState(false);
 	const { isModalOpen, handleModalChange, openedTask, taskColumn } = useContext(
 		ModalContext
 	);
+	const { id, title, labels, comments, description, todolist } = openedTask;
+	const [openedCard, setCardData] = useState({
+		title,
+		labels,
+		description,
+		todolist,
+	});
+
 	const handleSideMenuclick = (e) => {
 		if (!e.target.classList.contains('button-link')) {
 			setMenuData({
@@ -180,6 +191,13 @@ const Modal = ({
 	const handleOutsideModalClick = (e) => {
 		if (e.target.classList.contains('backdrop')) {
 			history.goBack();
+			setCardDataOnModalClose(
+				boardId,
+				id,
+				openedCard.title,
+				openedCard.description,
+				openedCard.todolist
+			);
 			handleModalChange();
 			setMenuData({
 				...isMenuClicked,
@@ -192,6 +210,7 @@ const Modal = ({
 	const handleActivityChange = () => {
 		setActivity(!isActivityClicked);
 	};
+
 	useEffect(() => {
 		const innerModal = document.querySelector('.innerModal');
 		innerModal.addEventListener('click', (e) => {
@@ -213,8 +232,41 @@ const Modal = ({
 	const handleFormSubmit = (e) => {
 		e.preventDefault();
 		const commentContent = e.target.elements['content'].value;
-		addNewComment(openedTask.id, boardId, commentContent);
+		addNewComment(id, boardId, commentContent);
 		e.target.reset();
+	};
+	const handleTitleChange = (e) => {
+		const { value } = e.target;
+		setCardData({ ...openedCard, title: value });
+	};
+	const handleDescriptionChange = (e) => {
+		const { value } = e.target;
+		setCardData({ ...openedCard, description: value });
+	};
+
+	const handleToDoDelete = (taskId) => {
+		const newArr = openedCard.todolist.filter(({ id }) => id !== taskId);
+		setCardData({ ...openedCard, todolist: newArr });
+	};
+
+	const handleToDoAdd = (e) => {
+		e.preventDefault();
+		const taskContent = e.target.elements[0].value;
+		if (taskContent === '') return;
+		const newTask = {
+			id: uuidv4(),
+			checked: false,
+			content: taskContent,
+		};
+		setCardData({ ...openedCard, todolist: [...openedCard.todolist, newTask] });
+
+		e.target.reset();
+	};
+
+	const handleCheckToDo = (toDoId) => {
+		const toDoIndex = openedCard.todolist.findIndex(({ id }) => id === toDoId);
+		openedCard.todolist[toDoIndex].checked = !openedCard.todolist[toDoIndex]
+			.checked;
 	};
 
 	return (
@@ -227,15 +279,18 @@ const Modal = ({
 			<ModalOuter isOpen={isModalOpen}>
 				<ModalInner onClick={handleSideMenuclick} className="innerModal">
 					<CardDetailsContainer>
-						{/* TODO dodać value oraz onchange taska */}
-						<ModalInputTitle value={(openedTask && openedTask.title) || ''} />
+						<ModalInputTitle
+							value={openedCard.title}
+							onChange={handleTitleChange}
+						/>
 						<>
 							<AlignInOneLine>
 								<DescriptionIcon />
 								<FieldName>Description</FieldName>
 							</AlignInOneLine>
 							<Textarea
-								value={(openedTask && openedTask.description) || ''}
+								value={openedCard.description}
+								onChange={handleDescriptionChange}
 								placeholder="Add a more detailed description"
 								isBorder={true}
 							/>
@@ -246,7 +301,12 @@ const Modal = ({
 								<FieldName>To-do list</FieldName>
 							</AlignInOneLine>
 							<div>
-								<ToDoList />
+								<ToDoList
+									handleToDoDelete={handleToDoDelete}
+									todolist={openedCard.todolist}
+									handleToDoAdd={handleToDoAdd}
+									handleCheckToDo={handleCheckToDo}
+								/>
 							</div>
 						</>
 						<>
@@ -270,19 +330,18 @@ const Modal = ({
 								<GreenButton type="submit" text={'Save'} />
 							</ModalForm>
 							<CommentsContainer>
-								{openedTask &&
-									openedTask.comments.map((comment, index) => (
-										<Comment isFirst={index === 0} key={comment.id}>
-											{comment.content}{' '}
-											<DeleteComment
-												onClick={() =>
-													removeComment(comment.id, boardId, openedTask.id)
-												}
-											>
-												Delete
-											</DeleteComment>
-										</Comment>
-									))}
+								{comments.map((comment, index) => (
+									<Comment isFirst={index === 0} key={comment.id}>
+										{comment.content}
+										<DeleteComment
+											onClick={() =>
+												removeComment(comment.id, boardId, openedTask.id)
+											}
+										>
+											Delete
+										</DeleteComment>
+									</Comment>
+								))}
 							</CommentsContainer>
 						</>
 					</CardDetailsContainer>
@@ -307,6 +366,16 @@ const mapDispatchToProps = (dispatch) => {
 
 		removeComment: (commentId, boardId, cardId) =>
 			dispatch(actions.removeComment(commentId, boardId, cardId)),
+		setCardDataOnModalClose: (boardId, cardId, title, description, todolist) =>
+			dispatch(
+				actions.setCardDataOnModalClose(
+					boardId,
+					cardId,
+					title,
+					description,
+					todolist
+				)
+			),
 	};
 };
 export default compose(withRouter, connect(null, mapDispatchToProps))(Modal);

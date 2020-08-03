@@ -1,14 +1,14 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { DragDropContext, Droppable } from 'react-beautiful-dnd';
 import styled from 'styled-components';
-
+import Modal from '../UI/Modal/Modal';
+import { ModalContext } from '../../context/ModalContext';
 import { connect } from 'react-redux';
 import { compose } from 'redux';
 import { withRouter } from 'react-router-dom';
 import * as actions from '../../store/actions';
 import Column from './Column/Column';
 import AddNewColumn from './AddNewColumn/AddNewColumn';
-import useBoardIdFromUrl from '../../customHooks/useBoardIdFromUrl';
 const Container = styled.div`
 	display: flex;
 	overflow: auto;
@@ -19,12 +19,11 @@ const Container = styled.div`
 	}
 `;
 
-const BoardsContainer = ({ currentBoard, onDragEnd, location }) => {
-	const boardId = useBoardIdFromUrl(location);
+const BoardsContainer = ({ currentBoard, onDragEnd, location, boardId }) => {
 	const handleDragEnd = (result) => {
 		onDragEnd(result, boardId);
 	};
-
+	const modalContext = useContext(ModalContext);
 	const columnArray = currentBoard.columnOrder.map((columnId, index) => {
 		const column = currentBoard.columns[columnId];
 		const cards = column.cardsIds.map((cardId) => currentBoard.cards[cardId]);
@@ -35,6 +34,7 @@ const BoardsContainer = ({ currentBoard, onDragEnd, location }) => {
 
 	return (
 		<DragDropContext onDragEnd={handleDragEnd}>
+			{modalContext.isModalOpen && <Modal boardId={boardId} />}
 			<Droppable droppableId="all-columns" direction="horizontal" type="column">
 				{(provided) => (
 					<Container {...provided.droppableProps} ref={provided.innerRef}>

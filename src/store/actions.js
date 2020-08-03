@@ -127,3 +127,47 @@ export const removeComment = (commentId, boardId, cardId) => {
 		cardId,
 	};
 };
+
+export const setCardDataOnModalClose = (
+	boardId,
+	cardId,
+	title,
+	description,
+	todolist
+) => {
+	return {
+		type: types.SET_CARD_DATA_ON_CLOSE,
+		boardId,
+		cardId,
+		title,
+		description,
+		todolist,
+	};
+};
+
+export const addNewTodo = (boardId, cardId, toDoItem) => {
+	return {
+		type: types.ADD_NEW_TODO,
+		boardId,
+		cardId,
+		toDoItem,
+	};
+};
+
+export const changeCheckedTodo = (boardId, cardId, toDoId) => {
+	return {
+		type: types.CHECK_CHANGE_TODO,
+		boardId,
+		cardId,
+		toDoId,
+	};
+};
+
+export const removeToDoItem = (boardId, cardId, toDoId) => {
+	return {
+		type: types.REMOVE_TODO,
+		boardId,
+		cardId,
+		toDoId,
+	};
+};

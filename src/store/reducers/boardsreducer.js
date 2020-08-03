@@ -282,6 +282,82 @@ const reducer = (state = initialState, action) => {
 				},
 			};
 		}
+		case types.SET_CARD_DATA_ON_CLOSE:
+			const { title, description, todolist } = action;
+
+			const cardClone = { ...state[action.boardId].cards[action.cardId] };
+			cardClone.title = title;
+			cardClone.description = description;
+			cardClone.todolist = todolist;
+			return {
+				...state,
+				[action.boardId]: {
+					...state[action.boardId],
+					cards: {
+						...state[action.boardId].cards,
+						[action.cardId]: cardClone,
+					},
+				},
+			};
+
+		case types.ADD_NEW_TODO:
+			const { toDoItem } = action;
+			if (toDoItem.content === '') return { ...state };
+			const cardC = { ...state[action.boardId].cards[action.cardId] };
+			const newToDoItem = { id: uuidv4(), ...toDoItem };
+			cardC.todolist.push(newToDoItem);
+			return {
+				...state,
+				[action.boardId]: {
+					...state[action.boardId],
+					cards: {
+						...state[action.boardId].cards,
+						[action.cardId]: cardC,
+					},
+				},
+			};
+
+		case types.CHECK_CHANGE_TODO:
+			const { toDoId } = action;
+			const cardCl = { ...state[action.boardId].cards[action.cardId] };
+			const toDoIndex = cardCl.todolist.findIndex(({ id }) => id === toDoId);
+			console.log(cardCl.todolist[toDoIndex]);
+			console.log(toDoIndex);
+			cardCl.todolist[toDoIndex].checked = !cardCl.todolist[toDoIndex].checked;
+			return {
+				...state,
+				[action.boardId]: {
+					...state[action.boardId],
+					cards: {
+						...state[action.boardId].cards,
+						[action.cardId]: cardCl,
+					},
+				},
+			};
+
+		case types.REMOVE_TODO:
+			const cardCo = { ...state[action.boardId].cards[action.cardId] };
+			const todolistCopy = [
+				...state[action.boardId].cards[action.cardId].todolist,
+			];
+
+			const indexToRemove = cardCo.todolist.findIndex(
+				({ id }) => id === action.toDoId
+			);
+			todolistCopy.splice(indexToRemove, 1);
+			return {
+				...state,
+				[action.boardId]: {
+					...state[action.boardId],
+					cards: {
+						...state[action.boardId].cards,
+						[action.cardId]: {
+							...state[action.boardId].cards[action.cardId],
+							todolist: todolistCopy,
+						},
+					},
+				},
+			};
 		default:
 			return {
 				...state,
