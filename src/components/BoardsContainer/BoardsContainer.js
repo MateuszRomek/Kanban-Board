@@ -24,7 +24,6 @@ const BoardsContainer = ({ currentBoard, onDragEnd, boardId }) => {
 		onDragEnd(result, boardId);
 	};
 	const modalContext = useContext(ModalContext);
-	console.log(currentBoard.columnOrder);
 	return (
 		<DragDropContext onDragEnd={handleDragEnd}>
 			{modalContext.isModalOpen && (

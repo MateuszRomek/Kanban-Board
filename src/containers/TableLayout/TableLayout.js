@@ -43,7 +43,6 @@ function TableLayout(props) {
 	const boardName = boardData ? boardData.name : 'null';
 	const currentBoard = props.boards[boardId];
 
-	console.log(props.boards[boardId]);
 	return (
 		<div className="App">
 			{isBoardArrayEmpy && <Redirect to={'/'} />}
