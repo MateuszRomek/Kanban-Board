@@ -144,6 +144,21 @@ const DeleteComment = styled.span`
 	font-weight: 400;
 	text-decoration: underline;
 `;
+
+const FlexLabelContainer = styled.div`
+	display: flex;
+	flex-wrap: wrap;
+	align-items: center;
+`;
+
+const Label = styled.div`
+	background-color: ${({ bgColor }) => (bgColor ? bgColor : 'transparent')};
+	width: 40px;
+	padding: 0.5rem;
+	border-radius: 20px;
+	margin: 0 1rem 1rem 0;
+`;
+
 const Modal = ({
 	history,
 	location,
@@ -151,6 +166,8 @@ const Modal = ({
 	boardId,
 	removeComment,
 	setCardDataOnModalClose,
+	labels,
+	toggleLabelToTask,
 }) => {
 	const [isMenuClicked, setMenuData] = useState({
 		isOpen: false,
@@ -163,13 +180,26 @@ const Modal = ({
 	const { isModalOpen, handleModalChange, openedTask, taskColumn } = useContext(
 		ModalContext
 	);
-	const { id, title, labels, comments, description, todolist } = openedTask;
+	const {
+		id,
+		title,
+		labels: taskLabels,
+		comments,
+		description,
+		todolist,
+	} = openedTask;
 	const [openedCard, setCardData] = useState({
 		title,
 		labels,
 		description,
 		todolist,
 	});
+
+	const taskLabelsArray =
+		taskLabels.length > 0 &&
+		taskLabels
+			.map((label) => labels[label])
+			.map((label) => <Label key={label.id} bgColor={label.bgColor} />);
 
 	const handleSideMenuclick = (e) => {
 		if (!e.target.classList.contains('button-link')) {
@@ -268,6 +298,9 @@ const Modal = ({
 		openedCard.todolist[toDoIndex].checked = !openedCard.todolist[toDoIndex]
 			.checked;
 	};
+	const handleLabelClick = (labelId) => {
+		toggleLabelToTask(boardId, id, labelId);
+	};
 
 	return (
 		<Backdrop
@@ -275,7 +308,12 @@ const Modal = ({
 			className="backdrop"
 			isOpen={isModalOpen}
 		>
-			<NestedMenu isSideMenuClicked={isMenuClicked} buttonType="label" />
+			<NestedMenu
+				handleLabelClick={handleLabelClick}
+				boardId={boardId}
+				labels={labels}
+				isSideMenuClicked={isMenuClicked}
+			/>
 			<ModalOuter isOpen={isModalOpen}>
 				<ModalInner onClick={handleSideMenuclick} className="innerModal">
 					<CardDetailsContainer>
@@ -283,6 +321,7 @@ const Modal = ({
 							value={openedCard.title}
 							onChange={handleTitleChange}
 						/>
+						<FlexLabelContainer>{taskLabelsArray}</FlexLabelContainer>
 						<>
 							<AlignInOneLine>
 								<DescriptionIcon />
@@ -376,6 +415,8 @@ const mapDispatchToProps = (dispatch) => {
 					todolist
 				)
 			),
+		toggleLabelToTask: (boardId, cardId, labelId) =>
+			dispatch(actions.toggleLabelToTask(boardId, cardId, labelId)),
 	};
 };
 export default compose(withRouter, connect(null, mapDispatchToProps))(Modal);

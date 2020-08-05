@@ -2,7 +2,8 @@ import React, { useState } from 'react';
 import styled from 'styled-components';
 import EditMenu from './NestedEditMenu/NestedEditMenu';
 import { ReactComponent as EditIcon } from '../../../../../assets/icons/edit.svg';
-
+import { connect } from 'react-redux';
+import * as actions from '../../../../../store/actions';
 const HiddenNestedMenu = styled.div`
 	background-color: white;
 	padding: 1rem 1.5rem;
@@ -45,63 +46,48 @@ const LabelLi = styled.li`
 const LabelColor = styled.div`
 	width: 100%;
 	padding: 0.7rem 1.6rem;
-	background-color: #61bd4f;
+	background-color: ${({ color }) => (color ? `${color}` : 'white')};
 	border-radius: 8px;
 	color: white;
 	font-weight: normal;
-	font-size: 1.6rem;
+	font-size: 1.4rem;
 `;
 const EditButton = styled.button`
 	border: none;
 	background-color: transparent;
-	margin-left: 16px;
-	margin-right: 5px;
+	margin-left: 1.6rem;
+	margin-right: 0.5rem;
 	&:active {
 		outline: none;
 	}
+	& svg {
+		width: 2.2rem;
+		height: 2.2rem;
+	}
 `;
 
-function NestedMenu({ buttonType, isSideMenuClicked }) {
-	let container;
+function NestedMenu({
+	isSideMenuClicked,
+	labels,
+	editLabel,
+	boardId,
+	handleLabelClick,
+}) {
 	const [isEdit, setEdit] = useState(false);
-	const handleEditMenu = () => setEdit(!isEdit);
+	const [selectedLabel, setLabel] = useState(null);
+	const labelsArray = labels.labelArray.map((labelId) => labels[labelId]);
+	const handleEditMenu = (labelId) => {
+		setEdit(!isEdit);
+		setLabel(labelId);
+	};
+	const handleEditChange = (e) => {
+		e.preventDefault();
+		const { value } = e.target.elements[0];
+		editLabel(boardId, selectedLabel, value);
+		setEdit(!isEdit);
+		e.target.reset();
+	};
 
-	switch (buttonType) {
-		case 'label':
-			container = (
-				<div>
-					<LabelUl>
-						<EditMenu
-							isSideMenuClicked={isSideMenuClicked}
-							isEdit={isEdit}
-							handleEditMenu={handleEditMenu}
-						/>
-						<LabelLi>
-							<LabelColor>Test</LabelColor>
-							<EditButton onClick={handleEditMenu}>
-								<EditIcon style={{ height: '24px', width: '24px' }} />
-							</EditButton>
-						</LabelLi>
-						<LabelLi>
-							<LabelColor>Test</LabelColor>
-							<EditButton onClick={handleEditMenu}>
-								<EditIcon style={{ height: '24px', width: '24px' }} />
-							</EditButton>
-						</LabelLi>
-						<LabelLi>
-							<LabelColor>Test</LabelColor>
-							<EditButton onClick={handleEditMenu}>
-								<EditIcon style={{ height: '24px', width: '24px' }} />
-							</EditButton>
-						</LabelLi>
-					</LabelUl>
-				</div>
-			);
-			break;
-
-		default:
-			container = null;
-	}
 	return (
 		<HiddenNestedMenu
 			x={isSideMenuClicked.x}
@@ -111,10 +97,38 @@ function NestedMenu({ buttonType, isSideMenuClicked }) {
 		>
 			<HiddenNestedMenuRelative>
 				<NestetMenuTitle>Labels</NestetMenuTitle>
-				{container}
+				<div>
+					<LabelUl>
+						<EditMenu
+							h
+							handleEditChange={handleEditChange}
+							isSideMenuClicked={isSideMenuClicked}
+							isEdit={isEdit}
+							handleEditMenu={handleEditMenu}
+						/>
+						{labelsArray.map(({ id, bgColor, content }) => (
+							<LabelLi key={id}>
+								<LabelColor
+									onClick={() => handleLabelClick(id)}
+									color={bgColor}
+								>
+									{content}
+								</LabelColor>
+								<EditButton onClick={() => handleEditMenu(id)}>
+									<EditIcon />
+								</EditButton>
+							</LabelLi>
+						))}
+					</LabelUl>
+				</div>
 			</HiddenNestedMenuRelative>
 		</HiddenNestedMenu>
 	);
 }
-
-export default NestedMenu;
+const mapStateToDispatch = (dispatch) => {
+	return {
+		editLabel: (boardId, labelId, labelContent) =>
+			dispatch(actions.editLabel(boardId, labelId, labelContent)),
+	};
+};
+export default connect(null, mapStateToDispatch)(NestedMenu);

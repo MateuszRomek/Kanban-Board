@@ -2,6 +2,8 @@ import React, { useRef } from 'react';
 import styled from 'styled-components';
 import { CSSTransition } from 'react-transition-group';
 import { ReactComponent as CloseIcon } from '../../../../../../assets/icons/close.svg';
+import SubmitButton from '../../../ModalButtons/GreenButton';
+
 const EditMenu = styled.div`
 	position: absolute;
 	left: 0;
@@ -53,9 +55,14 @@ const EditMenuHeader = styled.div`
 	align-items: center;
 	justify-content: space-between;
 `;
-const NestedEditMenu = ({ isEdit, handleEditMenu }) => {
-	const EditMenuRef = useRef(null);
 
+const EditMenuForm = styled.form`
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+`;
+const NestedEditMenu = ({ isEdit, handleEditMenu, handleEditChange }) => {
+	const EditMenuRef = useRef(null);
 	return (
 		<>
 			<CSSTransition
@@ -72,13 +79,21 @@ const NestedEditMenu = ({ isEdit, handleEditMenu }) => {
 							<CloseIcon />
 						</CloseButton>
 					</EditMenuHeader>
-					<form>
-						<EditMenuLabel htmlFor="newLabelname"> Name </EditMenuLabel>
-						<EditMenuInputText
-							id="newLabelName"
-							type="text"
-						></EditMenuInputText>
-					</form>
+					<EditMenuForm onSubmit={(e) => handleEditChange(e)}>
+						<div>
+							<EditMenuLabel htmlFor="newLabelname"> Name </EditMenuLabel>
+							<EditMenuInputText
+								autoComplete="off"
+								id="newLabelName"
+								type="text"
+							></EditMenuInputText>
+						</div>
+						<SubmitButton
+							extraStyle={{ alignSelf: 'flex-end' }}
+							text="Save"
+							type="submit"
+						/>
+					</EditMenuForm>
 				</EditMenu>
 			</CSSTransition>
 		</>

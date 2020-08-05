@@ -11,9 +11,9 @@ const SubmitButton = styled.button`
 	font-weight: bold;
 `;
 
-const GreenButton = ({ onClick = null, text, type = 'button' }) => {
+const GreenButton = ({ onClick = null, text, type = 'button', extraStyle }) => {
 	return (
-		<SubmitButton type={type} onClick={onClick}>
+		<SubmitButton style={extraStyle} type={type} onClick={onClick}>
 			{text}
 		</SubmitButton>
 	);
