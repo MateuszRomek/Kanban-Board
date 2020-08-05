@@ -9,7 +9,6 @@ import { withRouter } from 'react-router-dom';
 import * as actions from '../../store/actions';
 import Column from './Column/Column';
 import AddNewColumn from './AddNewColumn/AddNewColumn';
-import useCount from '../../customHooks/useRenderCount';
 const Container = styled.div`
 	display: flex;
 	overflow: auto;
