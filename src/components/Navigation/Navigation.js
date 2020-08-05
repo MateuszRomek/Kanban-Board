@@ -75,7 +75,6 @@ const Navigation = (props) => {
 						</GoHome>
 					</Link>
 					<CurrentTable>{props.boardName}</CurrentTable>
-					<NavButton isMargin={true}>Boards</NavButton>
 				</FlexAlign>
 				<div>
 					<MainHeader>My Kanban Board</MainHeader>
