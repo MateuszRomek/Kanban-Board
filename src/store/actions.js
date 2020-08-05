@@ -171,3 +171,21 @@ export const removeToDoItem = (boardId, cardId, toDoId) => {
 		toDoId,
 	};
 };
+
+export const editLabel = (boardId, labelId, labelContent) => {
+	return {
+		type: types.EDIT_LABEL,
+		boardId,
+		labelId,
+		labelContent,
+	};
+};
+
+export const toggleLabelToTask = (boardId, cardId, labelId) => {
+	return {
+		type: types.TOGGLE_LABEL_TO_TASK,
+		boardId,
+		cardId,
+		labelId,
+	};
+};

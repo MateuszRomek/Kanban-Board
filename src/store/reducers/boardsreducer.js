@@ -26,7 +26,68 @@ const reducer = (state = initialState, action) => {
 			};
 
 			const columnId = uuidv4();
+
 			newState[newBoard.id] = {
+				labels: {
+					labelArray: [
+						'label-1',
+						'label-2',
+						'label-3',
+						'label-4',
+						'label-5',
+						'label-6',
+						'label-7',
+						'label-8',
+					],
+					'label-1': {
+						id: 'label-1',
+						color: 'green',
+						content: '',
+						bgColor: 'rgb(97, 189, 79)',
+					},
+					'label-2': {
+						id: 'label-2',
+						color: 'orange',
+						content: '',
+						bgColor: 'rgb(255, 120, 2)',
+					},
+					'label-3': {
+						id: 'label-3',
+						color: 'blue',
+						content: '',
+						bgColor: 'rgb(51, 144, 255)',
+					},
+					'label-4': {
+						id: 'label-4',
+						color: 'pink',
+						content: '',
+						bgColor: 'rgb(243, 14, 225)',
+					},
+					'label-5': {
+						id: 'label-5',
+						color: 'red',
+						content: '',
+						bgColor: 'rgb(240, 16, 26)',
+					},
+					'label-6': {
+						id: 'label-6',
+						color: 'aqua',
+						content: '',
+						bgColor: 'rgb(18, 233, 178)',
+					},
+					'label-7': {
+						id: 'label-7',
+						color: 'yellow',
+						content: '',
+						bgColor: 'rgb(234, 231, 0)',
+					},
+					'label-8': {
+						id: 'label-8',
+						color: 'purple',
+						content: '',
+						bgColor: 'rgb(138, 11, 238)',
+					},
+				},
 				cards: {
 					'card-1': {
 						id: 'card-1',
@@ -151,7 +212,7 @@ const reducer = (state = initialState, action) => {
 			};
 		case types.REMOVE_COLUMN:
 			const boardColumns = { ...state[action.boardId].columns };
-			delete boardColumns[`${action.columnId}`];
+			delete boardColumns[action.columnId];
 
 			const orderCopy = [...state[action.boardId].columnOrder];
 			const columnIndex = orderCopy.findIndex((c) => c === action.columnId);
@@ -321,8 +382,7 @@ const reducer = (state = initialState, action) => {
 			const { toDoId } = action;
 			const cardCl = { ...state[action.boardId].cards[action.cardId] };
 			const toDoIndex = cardCl.todolist.findIndex(({ id }) => id === toDoId);
-			console.log(cardCl.todolist[toDoIndex]);
-			console.log(toDoIndex);
+
 			cardCl.todolist[toDoIndex].checked = !cardCl.todolist[toDoIndex].checked;
 			return {
 				...state,
@@ -358,6 +418,57 @@ const reducer = (state = initialState, action) => {
 					},
 				},
 			};
+
+		case types.EDIT_LABEL:
+			const labelCopy = { ...state[action.boardId].labels };
+
+			labelCopy[action.labelId].content = action.labelContent;
+
+			return {
+				...state,
+				[action.boardId]: {
+					...state[action.boardId],
+					labels: {
+						...state[action.boardId].labels,
+						[action.label]: labelCopy,
+					},
+				},
+			};
+
+		case types.TOGGLE_LABEL_TO_TASK:
+			const card = { ...state[action.boardId].cards[action.cardId] };
+
+			//Check if card contains already this
+			const isLabelInCard = card.labels.findIndex(
+				(labelId) => labelId === action.labelId
+			);
+
+			if (isLabelInCard === -1) {
+				card.labels.push(action.labelId);
+				return {
+					...state,
+					[action.boardId]: {
+						...state[action.boardId],
+						cards: {
+							...state[action.boardId].cards,
+							[action.cardId]: card,
+						},
+					},
+				};
+			} else {
+				card.labels.splice(isLabelInCard, 1);
+				return {
+					...state,
+					[action.boardId]: {
+						...state[action.boardId],
+						cards: {
+							...state[action.boardId].cards,
+							[action.cardId]: card,
+						},
+					},
+				};
+			}
+
 		default:
 			return {
 				...state,
