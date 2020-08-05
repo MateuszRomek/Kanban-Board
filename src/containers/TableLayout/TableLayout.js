@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import styled from 'styled-components';
 import GlobalStyle from '../../assets/styles/GlobalStyle';
 import Navigation from '../../components/Navigation/Navigation';
@@ -30,7 +30,6 @@ const ContentContainer = styled.div`
 function TableLayout(props) {
 	const { onSideMenuClose } = props;
 	const [isMenuOpen, setMenu] = useState(false);
-	const [currentBoard, setCurrentBoard] = useState(null);
 	const boardId = useBoardIdFromUrl(props.location);
 	const isBoardArrayEmpy = props.boards.boards.length === 0;
 	const closeModal = () => {
@@ -42,11 +41,9 @@ function TableLayout(props) {
 		return id === boardId;
 	});
 	const boardName = boardData ? boardData.name : 'null';
+	const currentBoard = props.boards[boardId];
 
-	useEffect(() => {
-		setCurrentBoard(props.boards[boardId]);
-	}, [boardId, props.boards]);
-
+	console.log(props.boards[boardId]);
 	return (
 		<div className="App">
 			{isBoardArrayEmpy && <Redirect to={'/'} />}

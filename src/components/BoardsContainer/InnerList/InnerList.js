@@ -10,7 +10,8 @@ const LinkWrapper = styled.div`
 		color: black;
 	}
 `;
-const InnerList = ({ cards, columnId }) => {
+
+const InnerList = ({ cards, columnId, currentBoard }) => {
 	let { url } = useRouteMatch();
 	const { handleModalChange, handleTaskChoose, handleTaskColumn } = useContext(
 		ModalContext
@@ -18,13 +19,18 @@ const InnerList = ({ cards, columnId }) => {
 	const handleCardClick = (card) => {
 		handleTaskColumn(columnId);
 		handleTaskChoose(card);
-
 		handleModalChange();
 	};
 	return cards.map((card, index) => (
 		<LinkWrapper onClick={() => handleCardClick(card)} key={card.id}>
 			<Link to={`${url}/t/${card.id}`}>
-				<Card index={index} taskId={card.id} title={card.title} />
+				<Card
+					allLabels={currentBoard.labels}
+					cardLabels={card.labels}
+					index={index}
+					taskId={card.id}
+					title={card.title}
+				/>
 			</Link>
 		</LinkWrapper>
 	));

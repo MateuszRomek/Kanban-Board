@@ -42,9 +42,11 @@ const ColumnTitleHolder = styled.div`
 	display: flex;
 	align-items: center;
 	justify-content: flex-start;
+	transition: all 0.3s;
 `;
 
 const TaskList = styled.div`
+	transition: all 0.3s;
 	padding: 8px;
 	flex-grow: 1;
 	min-height: 9rem;
@@ -85,6 +87,7 @@ const Column = (props) => {
 	const formRef = React.useRef(null);
 	const currentBoardId = useBoardIdFromUrl(props.location);
 	const currentBoardColumns = props.boardState[currentBoardId].columns;
+	// console.log(props.column.id, currentBoardColumns[props.column.id]);
 	const currentColumnTitle = currentBoardColumns[props.column.id].title;
 
 	const handleColumnTitleChange = (e) => {
@@ -120,7 +123,11 @@ const Column = (props) => {
 								isDraggingOver={snapshot.isDraggingOver}
 								{...provided.droppableProps}
 							>
-								<InnerList columnId={props.column.id} cards={props.cards} />
+								<InnerList
+									currentBoard={props.currentBoard}
+									columnId={props.column.id}
+									cards={props.cards}
+								/>
 								{provided.placeholder}
 								<RelativeDiv>
 									<CSSTransition

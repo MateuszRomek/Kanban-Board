@@ -9,6 +9,7 @@ import { withRouter } from 'react-router-dom';
 import * as actions from '../../store/actions';
 import Column from './Column/Column';
 import AddNewColumn from './AddNewColumn/AddNewColumn';
+import useCount from '../../customHooks/useRenderCount';
 const Container = styled.div`
 	display: flex;
 	overflow: auto;
@@ -19,26 +20,35 @@ const Container = styled.div`
 	}
 `;
 
-const BoardsContainer = ({ currentBoard, onDragEnd, location, boardId }) => {
+const BoardsContainer = ({ currentBoard, onDragEnd, boardId }) => {
 	const handleDragEnd = (result) => {
 		onDragEnd(result, boardId);
 	};
 	const modalContext = useContext(ModalContext);
-	const columnArray = currentBoard.columnOrder.map((columnId, index) => {
-		const column = currentBoard.columns[columnId];
-		const cards = column.cardsIds.map((cardId) => currentBoard.cards[cardId]);
-		return (
-			<Column index={index} column={column} key={columnId} cards={cards} />
-		);
-	});
-
+	console.log(currentBoard.columnOrder);
 	return (
 		<DragDropContext onDragEnd={handleDragEnd}>
-			{modalContext.isModalOpen && <Modal boardId={boardId} />}
+			{modalContext.isModalOpen && (
+				<Modal labels={currentBoard.labels} boardId={boardId} />
+			)}
 			<Droppable droppableId="all-columns" direction="horizontal" type="column">
 				{(provided) => (
 					<Container {...provided.droppableProps} ref={provided.innerRef}>
-						{columnArray}
+						{currentBoard.columnOrder.map((columnId, index) => {
+							const column = currentBoard.columns[columnId];
+							const cards = column.cardsIds.map(
+								(cardId) => currentBoard.cards[cardId]
+							);
+							return (
+								<Column
+									currentBoard={currentBoard}
+									index={index}
+									column={column}
+									key={columnId}
+									cards={cards}
+								/>
+							);
+						})}
 						{provided.placeholder}
 						<AddNewColumn />
 					</Container>

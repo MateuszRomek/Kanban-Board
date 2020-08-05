@@ -47,7 +47,7 @@ const BoardsContainer = styled.div`
 `;
 
 const BoardsHome = ({ state }) => {
-	const userBoards = state.boards.map((board) => (
+	const userBoards = state.map((board) => (
 		<Link
 			key={board.id}
 			to={{
@@ -77,7 +77,7 @@ const BoardsHome = ({ state }) => {
 
 const mapStateToProps = (state) => {
 	return {
-		state: state.BoardsReducer,
+		state: state.BoardsReducer.boards,
 	};
 };
 
